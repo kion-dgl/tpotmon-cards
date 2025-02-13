@@ -1,5 +1,5 @@
 ---
-import "./src/styles/global.css";
+import "/src/styles/global.css";
 import CardInput from "../components/CardInput.astro";
 ---
 
@@ -9,12 +9,6 @@ import CardInput from "../components/CardInput.astro";
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Card Preview Layout</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script>
-            tailwind.config = {
-                darkMode: "class",
-            };
-        </script>
     </head>
     <body class="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100">
         <!-- Navbar -->
@@ -53,23 +47,5 @@ import CardInput from "../components/CardInput.astro";
                 </div>
             </div>
         </div>
-
-        <script>
-            const themeToggle = document.getElementById("themeToggle");
-            themeToggle.addEventListener("click", () => {
-                document.documentElement.classList.toggle("dark");
-                localStorage.setItem(
-                    "theme",
-                    document.documentElement.classList.contains("dark")
-                        ? "dark"
-                        : "light",
-                );
-            });
-
-            // Load theme from local storage
-            if (localStorage.getItem("theme") === "dark") {
-                document.documentElement.classList.add("dark");
-            }
-        </script>
     </body>
 </html>
