@@ -1,6 +1,6 @@
 ---
 import "/src/styles/global.css";
-import CardInput from "../components/CardInput.astro";
+import CardInput from "../components/CardInput.tsx";
 ---
 
 <!doctype html>
@@ -16,7 +16,7 @@ import CardInput from "../components/CardInput.astro";
             <div
                 class="container flex items-center justify-between py-4 mx-auto"
             >
-                <div class="text-lg font-bold">Navbar</div>
+                <div class="text-lg font-bold">Tpotmon Creator</div>
                 <button
                     id="themeToggle"
                     class="px-4 py-2 text-sm font-medium bg-gray-200 rounded dark:bg-gray-700 dark:text-gray-300"
@@ -30,7 +30,7 @@ import CardInput from "../components/CardInput.astro";
         <div class="container mx-auto mt-6">
             <div class="flex flex-col-reverse lg:flex-row gap-6">
                 <!-- Input Section -->
-                <CardInput />
+                <CardInput client:only="react" />
 
                 <!-- Card Preview Section -->
                 <div
