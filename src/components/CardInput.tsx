@@ -1,18 +1,14 @@
 import React, { useState } from "react";
 
-type WeaknessOrResist = {
-  amount: number;
-  type: string;
-};
-
 type Ability = {
-  type: "Passive" | "Active" | "One-Time";
+  type: "One-Time" | "Passive" | "Active";
   description: string;
 };
 
 type Attack = {
-  description: string;
-  type: string;
+  type: "Direct" | "Dice Roll" | "Coin Flip";
+  damage: number;
+  category: "Goon" | "Thirst" | "Gaslight" | "Roast";
 };
 
 type CardData = {
@@ -21,8 +17,8 @@ type CardData = {
   profileBanner: string;
   followers: number;
   following: number;
-  weakness: WeaknessOrResist;
-  resists: WeaknessOrResist;
+  weakness: { amount: number; type: string };
+  resists: { amount: number; type: string };
   createdOn: Date;
   rarity: string;
   hp: string;
@@ -44,7 +40,7 @@ const CardInput: React.FC = () => {
     rarity: "",
     hp: "",
     abilities: [{ type: "Passive", description: "" }],
-    attacks: [{ description: "", type: "" }],
+    attacks: [{ type: "Direct", damage: 0, category: "Goon" }],
     title: "",
   });
 
@@ -69,17 +65,50 @@ const CardInput: React.FC = () => {
     }));
   };
 
-  const incrementNestedAmount = (
-    section: "weakness" | "resists",
-    step: number,
-  ) => {
-    setCardData((prevState) => ({
-      ...prevState,
-      [section]: {
-        ...prevState[section],
-        amount: prevState[section].amount + step,
-      },
-    }));
+  const updateAbility = (index: number, field: keyof Ability, value: any) => {
+    const updatedAbilities = [...cardData.abilities];
+    updatedAbilities[index] = { ...updatedAbilities[index], [field]: value };
+    setCardData((prevState) => ({ ...prevState, abilities: updatedAbilities }));
+  };
+
+  const updateAttack = (index: number, field: keyof Attack, value: any) => {
+    const updatedAttacks = [...cardData.attacks];
+    updatedAttacks[index] = { ...updatedAttacks[index], [field]: value };
+    setCardData((prevState) => ({ ...prevState, attacks: updatedAttacks }));
+  };
+
+  const addAbility = () => {
+    if (cardData.abilities.length < 2) {
+      setCardData((prevState) => ({
+        ...prevState,
+        abilities: [
+          ...prevState.abilities,
+          { type: "Passive", description: "" },
+        ],
+      }));
+    }
+  };
+
+  const addAttack = () => {
+    if (cardData.attacks.length < 2) {
+      setCardData((prevState) => ({
+        ...prevState,
+        attacks: [
+          ...prevState.attacks,
+          { type: "Direct", damage: 0, category: "Goon" },
+        ],
+      }));
+    }
+  };
+
+  const removeAbility = (index: number) => {
+    const updatedAbilities = cardData.abilities.filter((_, i) => i !== index);
+    setCardData((prevState) => ({ ...prevState, abilities: updatedAbilities }));
+  };
+
+  const removeAttack = (index: number) => {
+    const updatedAttacks = cardData.attacks.filter((_, i) => i !== index);
+    setCardData((prevState) => ({ ...prevState, attacks: updatedAttacks }));
   };
 
   const downloadCardData = () => {
@@ -96,7 +125,7 @@ const CardInput: React.FC = () => {
   };
 
   return (
-    <div className="sm:w-full lg:w-96 p-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
+    <div className="sm:w-full lg:w-lg p-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
       {/* Username */}
       <div className="mb-4">
         <label className="block text-sm font-medium mb-2">Username</label>
@@ -128,6 +157,128 @@ const CardInput: React.FC = () => {
           placeholder="Enter HP"
           className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
         />
+      </div>
+
+      {/* Abilities Section */}
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-2">
+          <label className="text-sm font-medium flex-1">Abilities</label>
+
+          <button
+            className="px-3 py-1 bg-green-500 text-white text-sm rounded-lg hover:bg-green-600"
+            onClick={addAbility}
+            disabled={cardData.abilities.length >= 2}
+          >
+            +
+          </button>
+          {/* Remove Button */}
+          <button
+            className="px-3 py-1 text-sm ml-4 bg-red-500 text-white rounded-lg hover:bg-red-600"
+            onClick={() => removeAbility(index)}
+            disabled={cardData.abilities.length <= 1}
+          >
+            -
+          </button>
+        </div>
+        {cardData.abilities.map((ability, index) => (
+          <div key={index} className="mb-4">
+            {/* Name */}
+            <div className="mb-2">
+              <label className="block text-sm font-medium mb-1">Name</label>
+              <input
+                type="text"
+                value={ability.name || ""}
+                onChange={(e) => updateAbility(index, "name", e.target.value)}
+                placeholder="Enter Name"
+                className="w-full px-4 py-2 border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200"
+              />
+            </div>
+
+            {/* Type */}
+            <div className="mb-2">
+              <label className="block text-sm font-medium mb-1">Type</label>
+              <select
+                value={ability.type}
+                onChange={(e) => updateAbility(index, "type", e.target.value)}
+                className="w-full px-4 py-2 border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200"
+              >
+                <option>One-Time</option>
+                <option>Passive</option>
+                <option>Active</option>
+              </select>
+            </div>
+
+            {/* Description */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1">
+                Description
+              </label>
+              <textarea
+                value={ability.description}
+                onChange={(e) =>
+                  updateAbility(index, "description", e.target.value)
+                }
+                placeholder="Enter Description"
+                className="w-full px-4 py-2 border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200"
+              ></textarea>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Attacks Section */}
+      <div className="mb-6">
+        <label className="block text-sm font-medium mb-2">Attacks</label>
+        {cardData.attacks.map((attack, index) => (
+          <div key={index} className="mb-4">
+            <div className="flex gap-4 mb-2">
+              <select
+                value={attack.type}
+                onChange={(e) => updateAttack(index, "type", e.target.value)}
+                className="w-1/3 px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+              >
+                <option>Direct</option>
+                <option>Dice Roll</option>
+                <option>Coin Flip</option>
+              </select>
+              <input
+                type="number"
+                value={attack.damage}
+                onChange={(e) =>
+                  updateAttack(index, "damage", parseInt(e.target.value))
+                }
+                placeholder="Damage"
+                className="w-1/4 px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+              />
+              <select
+                value={attack.category}
+                onChange={(e) =>
+                  updateAttack(index, "category", e.target.value)
+                }
+                className="w-1/3 px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+              >
+                <option>Goon</option>
+                <option>Thirst</option>
+                <option>Gaslight</option>
+                <option>Roast</option>
+              </select>
+              <button
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                onClick={() => removeAttack(index)}
+                disabled={cardData.attacks.length <= 1}
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        ))}
+        <button
+          className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+          onClick={addAttack}
+          disabled={cardData.attacks.length >= 2}
+        >
+          Add Attack
+        </button>
       </div>
 
       {/* Weakness */}
@@ -206,14 +357,6 @@ const CardInput: React.FC = () => {
           <option>Rare</option>
           <option>Ultra Rare</option>
         </select>
-      </div>
-
-      {/* Abilities & Attacks */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">
-          Abilities (default: 1)
-        </label>
-        {/* Similar structure for abilities and attacks */}
       </div>
 
       {/* Title */}
