@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 
 type AttackTypes = "None" | "Goon" | "Thirst" | "Gaslight" | "Roast";
+type AttackChance = "Direct" | "Dice Roll" | "Coin Flip";
+type AbilityTypes = "One-Time" | "Passive" | "Active";
 
 type Ability = {
-  type: "One-Time" | "Passive" | "Active";
+  type: AbilityTypes;
   name: string;
   description: string;
 };
 
 type Attack = {
   name: string;
-  chance: "Direct" | "Dice Roll" | "Coin Flip";
+  chance: AttackChance;
   type: AttackTypes;
   damage: number;
+  description: string;
 };
 
 type CardData = {
@@ -44,7 +47,9 @@ const CardInput: React.FC = () => {
     rarity: "",
     hp: "",
     abilities: [{ name: "", type: "Passive", description: "" }],
-    attacks: [{ name: "", type: "None", damage: 0, chance: "Direct" }],
+    attacks: [
+      { name: "", type: "None", damage: 0, chance: "Direct", description: "" },
+    ],
     title: "",
   });
 
@@ -144,10 +149,10 @@ const CardInput: React.FC = () => {
                 type="text"
                 value={ability.name || ""}
                 onChange={(e) =>
-                  setCardData((prevState) => ({
-                    ...prevState,
-                    prevState.abilities[index].name = e.target.value
-                  }))
+                  setCardData((prevState) => {
+                    prevState.abilities[index].name = e.target.value;
+                    return prevState;
+                  })
                 }
                 placeholder="Enter Name"
                 className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
@@ -159,10 +164,13 @@ const CardInput: React.FC = () => {
               <label className="block text-sm font-medium mb-1">Type</label>
               <select
                 value={ability.type}
-                onChange={(e) =>    setCardData((prevState) => ({
-                  ...prevState,
-                  prevState.abilities[index].type = e.target.value
-                }))}
+                onChange={(e) =>
+                  setCardData((prevState) => {
+                    prevState.abilities[index].type = e.target
+                      .value as AbilityTypes;
+                    return prevState;
+                  })
+                }
                 className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
               >
                 <option>One-Time</option>
@@ -179,10 +187,10 @@ const CardInput: React.FC = () => {
               <textarea
                 value={ability.description}
                 onChange={(e) =>
-                  setCardData((prevState) => ({
-                    ...prevState,
-                    prevState.abilities[index].description = e.target.value
-                  }))
+                  setCardData((prevState) => {
+                    prevState.abilities[index].description = e.target.value;
+                    return prevState;
+                  })
                 }
                 placeholder="Enter Description"
                 className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
@@ -200,7 +208,13 @@ const CardInput: React.FC = () => {
           <button
             className="px-3 py-1 bg-green-500 text-white text-sm rounded-lg hover:bg-green-600"
             onClick={() => {
-              cardData.attacks.push({ name: "", type: "None", damage: 0, chance: "Direct" });
+              cardData.attacks.push({
+                name: "",
+                type: "None",
+                damage: 0,
+                chance: "Direct",
+                description: "",
+              });
             }}
             disabled={cardData.abilities.length + cardData.attacks.length >= 2}
           >
@@ -209,7 +223,9 @@ const CardInput: React.FC = () => {
           {/* Remove Button */}
           <button
             className="px-3 py-1 text-sm ml-4 bg-red-500 text-white rounded-lg hover:bg-red-600"
-            onClick={() => { cardData.attacks.pop();}}
+            onClick={() => {
+              cardData.attacks.pop();
+            }}
             disabled={cardData.attacks.length === 0}
           >
             -
@@ -224,7 +240,12 @@ const CardInput: React.FC = () => {
                 <input
                   type="text"
                   value={attack.name || ""}
-                  onChange={(e) => updateAbility(index, "name", e.target.value)}
+                  onChange={(e) =>
+                    setCardData((prevState) => {
+                      prevState.attacks[index].name = e.target.value;
+                      return prevState;
+                    })
+                  }
                   placeholder="Enter Name"
                   className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                 />
@@ -233,8 +254,14 @@ const CardInput: React.FC = () => {
               <div className="mb-2">
                 <label className="block text-sm font-medium mb-1">Chance</label>
                 <select
-                  value={attack.type}
-                  onChange={(e) => updateAbility(index, "type", e.target.value)}
+                  value={attack.chance}
+                  onChange={(e) =>
+                    setCardData((prevState) => {
+                      prevState.attacks[index].chance = e.target
+                        .value as AttackChance;
+                      return prevState;
+                    })
+                  }
                   className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                 >
                   <option>Thirst</option>
@@ -251,7 +278,10 @@ const CardInput: React.FC = () => {
                 <textarea
                   value={attack.description}
                   onChange={(e) =>
-                    updateAbility(index, "description", e.target.value)
+                    setCardData((prevState) => {
+                      prevState.attacks[index].description = e.target.value;
+                      return prevState;
+                    })
                   }
                   placeholder="Enter Description"
                   className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
@@ -263,7 +293,13 @@ const CardInput: React.FC = () => {
                 <label className="block text-sm font-medium mb-1">Type</label>
                 <select
                   value={attack.type}
-                  onChange={(e) => updateAbility(index, "type", e.target.value)}
+                  onChange={(e) =>
+                    setCardData((prevState) => {
+                      prevState.attacks[index].type = e.target
+                        .value as AttackTypes;
+                      return prevState;
+                    })
+                  }
                   className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                 >
                   <option>Thirst</option>
