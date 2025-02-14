@@ -322,14 +322,20 @@ const CardInput: React.FC = () => {
             min="0"
             max="100"
             onChange={(e) =>
-              handleNestedChange("weakness", "amount", e.target.value)
+              setCardData((prevState) => {
+                prevState.weakness.amount = parseInt(e.target.value);
+                return prevState;
+              })
             }
             className="w-1/2 px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
           />
           <select
             value={cardData.weakness.type}
             onChange={(e) =>
-              handleNestedChange("weakness", "type", e.target.value)
+              setCardData((prevState) => {
+                prevState.weakness.type = e.target.value as AttackTypes;
+                return prevState;
+              })
             }
             className="w-1/2 px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
           >
@@ -354,14 +360,20 @@ const CardInput: React.FC = () => {
             min="0"
             max="100"
             onChange={(e) =>
-              handleNestedChange("resists", "amount", e.target.value)
+              setCardData((prevState) => {
+                prevState.resists.amount = parseInt(e.target.value);
+                return prevState;
+              })
             }
             className="w-1/2 px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
           />
           <select
             value={cardData.resists.type}
             onChange={(e) =>
-              handleNestedChange("resists", "type", e.target.value)
+              setCardData((prevState) => {
+                prevState.resists.type = e.target.value as AttackTypes;
+                return prevState;
+              })
             }
             className="w-1/2 px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
           >
@@ -380,7 +392,12 @@ const CardInput: React.FC = () => {
         <label className="block text-sm font-medium mb-2">Rarity</label>
         <select
           value={cardData.rarity}
-          onChange={(e) => handleInputChange("rarity", e.target.value)}
+          onChange={(e) =>
+            setCardData((prevState) => ({
+              ...prevState,
+              rarity: e.target.value,
+            }))
+          }
           className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
         >
           <option value="">Select Rarity</option>
@@ -396,7 +413,12 @@ const CardInput: React.FC = () => {
         <input
           type="text"
           value={cardData.title}
-          onChange={(e) => handleInputChange("title", e.target.value)}
+          onChange={(e) =>
+            setCardData((prevState) => ({
+              ...prevState,
+              title: e.target.value,
+            }))
+          }
           placeholder="Enter Title"
           className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
         />
