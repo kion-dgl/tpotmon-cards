@@ -199,16 +199,18 @@ const CardInput: React.FC = () => {
 
           <button
             className="px-3 py-1 bg-green-500 text-white text-sm rounded-lg hover:bg-green-600"
-            onClick={addAbility}
-            disabled={cardData.abilities.length >= 2}
+            onClick={() => {
+              cardData.attacks.push({ name: "", type: "None", damage: 0, chance: "Direct" });
+            }}
+            disabled={cardData.abilities.length + cardData.attacks.length >= 2}
           >
             +
           </button>
           {/* Remove Button */}
           <button
             className="px-3 py-1 text-sm ml-4 bg-red-500 text-white rounded-lg hover:bg-red-600"
-            onClick={() => removeAbility(index)}
-            disabled={cardData.abilities.length <= 1}
+            onClick={() => { cardData.attacks.pop();}}
+            disabled={cardData.attacks.length === 0}
           >
             -
           </button>
