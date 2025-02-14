@@ -161,8 +161,8 @@ const CardInput: React.FC = () => {
 
       {/* Abilities Section */}
       <div className="mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <label className="text-sm font-medium flex-1">Abilities</label>
+        <div className="flex items-center justify-between mb-2 border-b-1 pb-2 border-gray-600">
+          <label className="text-lg font-medium flex-1">Abilities</label>
 
           <button
             className="px-3 py-1 bg-green-500 text-white text-sm rounded-lg hover:bg-green-600"
@@ -181,7 +181,7 @@ const CardInput: React.FC = () => {
           </button>
         </div>
         {cardData.abilities.map((ability, index) => (
-          <div key={index} className="mb-4">
+          <div key={index} className="mb-4 border-b-1 pb-2 border-gray-700">
             {/* Name */}
             <div className="mb-2">
               <label className="block text-sm font-medium mb-1">Name</label>
@@ -190,7 +190,7 @@ const CardInput: React.FC = () => {
                 value={ability.name || ""}
                 onChange={(e) => updateAbility(index, "name", e.target.value)}
                 placeholder="Enter Name"
-                className="w-full px-4 py-2 border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200"
+                className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
               />
             </div>
 
@@ -200,7 +200,7 @@ const CardInput: React.FC = () => {
               <select
                 value={ability.type}
                 onChange={(e) => updateAbility(index, "type", e.target.value)}
-                className="w-full px-4 py-2 border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200"
+                className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
               >
                 <option>One-Time</option>
                 <option>Passive</option>
@@ -209,7 +209,7 @@ const CardInput: React.FC = () => {
             </div>
 
             {/* Description */}
-            <div className="mb-4">
+            <div className="mb-2">
               <label className="block text-sm font-medium mb-1">
                 Description
               </label>
@@ -219,7 +219,7 @@ const CardInput: React.FC = () => {
                   updateAbility(index, "description", e.target.value)
                 }
                 placeholder="Enter Description"
-                className="w-full px-4 py-2 border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200"
+                className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
               ></textarea>
             </div>
           </div>
