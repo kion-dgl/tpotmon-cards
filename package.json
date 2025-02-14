@@ -17,5 +17,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwindcss": "^4.0.6"
+  },
+  "devDependencies": {
+    "@xpd/tailwind-3dtransforms": "^1.0.3"
   }
 }
