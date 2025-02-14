@@ -32,11 +32,12 @@ const Card3D: React.FC = () => {
             style={{
               transform: "rotateY(180deg)",
               backfaceVisibility: "hidden",
+              backgroundImage: "url('/card-back.png')",
+              backgroundSize: "100% 100%",
+              backgroundPosition: "center",
             }}
-            className="absolute w-full h-full bg-red-500 rounded-lg flex items-center justify-center"
-          >
-            <p className="text-white text-2xl">Back of the Card</p>
-          </div>
+            className="absolute w-full h-full rounded-lg flex items-center justify-center"
+          ></div>
         </div>
       </div>
 
