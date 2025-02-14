@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 
+type AttackTypes = "None" | "Goon" | "Thirst" | "Gaslight" | "Roast";
+
 type Ability = {
   type: "One-Time" | "Passive" | "Active";
+  name: string;
   description: string;
 };
 
 type Attack = {
-  type: "Direct" | "Dice Roll" | "Coin Flip";
+  name: string;
+  chance: "Direct" | "Dice Roll" | "Coin Flip";
+  type: AttackTypes;
   damage: number;
-  category: "Goon" | "Thirst" | "Gaslight" | "Roast";
 };
 
 type CardData = {
@@ -17,8 +21,8 @@ type CardData = {
   profileBanner: string;
   followers: number;
   following: number;
-  weakness: { amount: number; type: string };
-  resists: { amount: number; type: string };
+  weakness: { amount: number; type: AttackTypes };
+  resists: { amount: number; type: AttackTypes };
   createdOn: Date;
   rarity: string;
   hp: string;
@@ -34,82 +38,15 @@ const CardInput: React.FC = () => {
     profileBanner: "",
     followers: 0,
     following: 0,
-    weakness: { amount: 0, type: "" },
-    resists: { amount: 0, type: "" },
+    weakness: { amount: 0, type: "None" },
+    resists: { amount: 0, type: "None" },
     createdOn: new Date(),
     rarity: "",
     hp: "",
-    abilities: [{ type: "Passive", description: "" }],
-    attacks: [{ type: "Direct", damage: 0, category: "Goon" }],
+    abilities: [{ name: "", type: "Passive", description: "" }],
+    attacks: [{ name: "", type: "None", damage: 0, chance: "Direct" }],
     title: "",
   });
-
-  const handleInputChange = (field: keyof CardData, value: any) => {
-    setCardData((prevState) => ({
-      ...prevState,
-      [field]: value,
-    }));
-  };
-
-  const handleNestedChange = (
-    section: "weakness" | "resists",
-    field: keyof WeaknessOrResist,
-    value: any,
-  ) => {
-    setCardData((prevState) => ({
-      ...prevState,
-      [section]: {
-        ...prevState[section],
-        [field]: value,
-      },
-    }));
-  };
-
-  const updateAbility = (index: number, field: keyof Ability, value: any) => {
-    const updatedAbilities = [...cardData.abilities];
-    updatedAbilities[index] = { ...updatedAbilities[index], [field]: value };
-    setCardData((prevState) => ({ ...prevState, abilities: updatedAbilities }));
-  };
-
-  const updateAttack = (index: number, field: keyof Attack, value: any) => {
-    const updatedAttacks = [...cardData.attacks];
-    updatedAttacks[index] = { ...updatedAttacks[index], [field]: value };
-    setCardData((prevState) => ({ ...prevState, attacks: updatedAttacks }));
-  };
-
-  const addAbility = () => {
-    if (cardData.abilities.length < 2) {
-      setCardData((prevState) => ({
-        ...prevState,
-        abilities: [
-          ...prevState.abilities,
-          { type: "Passive", description: "" },
-        ],
-      }));
-    }
-  };
-
-  const addAttack = () => {
-    if (cardData.attacks.length < 2) {
-      setCardData((prevState) => ({
-        ...prevState,
-        attacks: [
-          ...prevState.attacks,
-          { type: "Direct", damage: 0, category: "Goon" },
-        ],
-      }));
-    }
-  };
-
-  const removeAbility = (index: number) => {
-    const updatedAbilities = cardData.abilities.filter((_, i) => i !== index);
-    setCardData((prevState) => ({ ...prevState, abilities: updatedAbilities }));
-  };
-
-  const removeAttack = (index: number) => {
-    const updatedAttacks = cardData.attacks.filter((_, i) => i !== index);
-    setCardData((prevState) => ({ ...prevState, attacks: updatedAttacks }));
-  };
 
   const downloadCardData = () => {
     const json = JSON.stringify(cardData, null, 2);
@@ -132,7 +69,12 @@ const CardInput: React.FC = () => {
         <input
           type="text"
           value={cardData.username}
-          onChange={(e) => handleInputChange("username", e.target.value)}
+          onChange={(e) =>
+            setCardData((prevState) => ({
+              ...prevState,
+              username: e.target.value,
+            }))
+          }
           placeholder="Enter username"
           className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
         />
