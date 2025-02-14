@@ -162,7 +162,7 @@ const CardInput: React.FC = () => {
       {/* Abilities Section */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2 border-b-1 pb-2 border-gray-600">
-          <label className="text-lg font-medium flex-1">Abilities</label>
+          <label className="text-lg font-medium flex-1">Ability</label>
 
           <button
             className="px-3 py-1 bg-green-500 text-white text-sm rounded-lg hover:bg-green-600"
@@ -228,57 +228,84 @@ const CardInput: React.FC = () => {
 
       {/* Attacks Section */}
       <div className="mb-6">
-        <label className="block text-sm font-medium mb-2">Attacks</label>
+        <div className="flex items-center justify-between mb-2 border-b-1 pb-2 border-gray-600">
+          <label className="text-lg font-medium flex-1">Attack</label>
+
+          <button
+            className="px-3 py-1 bg-green-500 text-white text-sm rounded-lg hover:bg-green-600"
+            onClick={addAbility}
+            disabled={cardData.abilities.length >= 2}
+          >
+            +
+          </button>
+          {/* Remove Button */}
+          <button
+            className="px-3 py-1 text-sm ml-4 bg-red-500 text-white rounded-lg hover:bg-red-600"
+            onClick={() => removeAbility(index)}
+            disabled={cardData.abilities.length <= 1}
+          >
+            -
+          </button>
+        </div>
         {cardData.attacks.map((attack, index) => (
           <div key={index} className="mb-4">
-            <div className="flex gap-4 mb-2">
-              <select
-                value={attack.type}
-                onChange={(e) => updateAttack(index, "type", e.target.value)}
-                className="w-1/3 px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
-              >
-                <option>Direct</option>
-                <option>Dice Roll</option>
-                <option>Coin Flip</option>
-              </select>
-              <input
-                type="number"
-                value={attack.damage}
-                onChange={(e) =>
-                  updateAttack(index, "damage", parseInt(e.target.value))
-                }
-                placeholder="Damage"
-                className="w-1/4 px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
-              />
-              <select
-                value={attack.category}
-                onChange={(e) =>
-                  updateAttack(index, "category", e.target.value)
-                }
-                className="w-1/3 px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
-              >
-                <option>Goon</option>
-                <option>Thirst</option>
-                <option>Gaslight</option>
-                <option>Roast</option>
-              </select>
-              <button
-                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-                onClick={() => removeAttack(index)}
-                disabled={cardData.attacks.length <= 1}
-              >
-                Remove
-              </button>
+            <div key={index} className="mb-4 border-b-1 pb-2 border-gray-700">
+              {/* Name */}
+              <div className="mb-2">
+                <label className="block text-sm font-medium mb-1">Name</label>
+                <input
+                  type="text"
+                  value={attack.name || ""}
+                  onChange={(e) => updateAbility(index, "name", e.target.value)}
+                  placeholder="Enter Name"
+                  className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                />
+              </div>
+
+              <div className="mb-2">
+                <label className="block text-sm font-medium mb-1">Chance</label>
+                <select
+                  value={attack.type}
+                  onChange={(e) => updateAbility(index, "type", e.target.value)}
+                  className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                >
+                  <option>Thirst</option>
+                  <option>Goon</option>
+                  <option>Roast</option>
+                </select>
+              </div>
+
+              {/* Description */}
+              <div className="mb-2">
+                <label className="block text-sm font-medium mb-1">
+                  Description
+                </label>
+                <textarea
+                  value={attack.description}
+                  onChange={(e) =>
+                    updateAbility(index, "description", e.target.value)
+                  }
+                  placeholder="Enter Description"
+                  className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                ></textarea>
+              </div>
+
+              {/* Chance and Type */}
+              <div className="mb-2">
+                <label className="block text-sm font-medium mb-1">Type</label>
+                <select
+                  value={attack.type}
+                  onChange={(e) => updateAbility(index, "type", e.target.value)}
+                  className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                >
+                  <option>Thirst</option>
+                  <option>Goon</option>
+                  <option>Roast</option>
+                </select>
+              </div>
             </div>
           </div>
         ))}
-        <button
-          className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
-          onClick={addAttack}
-          disabled={cardData.attacks.length >= 2}
-        >
-          Add Attack
-        </button>
       </div>
 
       {/* Weakness */}
