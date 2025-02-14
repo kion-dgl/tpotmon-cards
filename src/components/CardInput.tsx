@@ -95,7 +95,12 @@ const CardInput: React.FC = () => {
         <input
           type="number"
           value={cardData.hp}
-          onChange={(e) => handleInputChange("hp", e.target.value)}
+          onChange={(e) =>
+            setCardData((prevState) => ({
+              ...prevState,
+              hp: e.target.value,
+            }))
+          }
           placeholder="Enter HP"
           className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
         />
@@ -108,16 +113,24 @@ const CardInput: React.FC = () => {
 
           <button
             className="px-3 py-1 bg-green-500 text-white text-sm rounded-lg hover:bg-green-600"
-            onClick={addAbility}
-            disabled={cardData.abilities.length >= 2}
+            onClick={() => {
+              cardData.abilities.push({
+                name: "",
+                type: "Passive",
+                description: "",
+              });
+            }}
+            disabled={cardData.abilities.length + cardData.attacks.length < 2}
           >
             +
           </button>
           {/* Remove Button */}
           <button
             className="px-3 py-1 text-sm ml-4 bg-red-500 text-white rounded-lg hover:bg-red-600"
-            onClick={() => removeAbility(index)}
-            disabled={cardData.abilities.length <= 1}
+            onClick={() => {
+              cardData.abilities.pop();
+            }}
+            disabled={cardData.abilities.length === 0}
           >
             -
           </button>
@@ -130,7 +143,12 @@ const CardInput: React.FC = () => {
               <input
                 type="text"
                 value={ability.name || ""}
-                onChange={(e) => updateAbility(index, "name", e.target.value)}
+                onChange={(e) =>
+                  setCardData((prevState) => ({
+                    ...prevState,
+                    prevState.abilities[index].name = e.target.value
+                  }))
+                }
                 placeholder="Enter Name"
                 className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
               />
@@ -141,7 +159,10 @@ const CardInput: React.FC = () => {
               <label className="block text-sm font-medium mb-1">Type</label>
               <select
                 value={ability.type}
-                onChange={(e) => updateAbility(index, "type", e.target.value)}
+                onChange={(e) =>    setCardData((prevState) => ({
+                  ...prevState,
+                  prevState.abilities[index].type = e.target.value
+                }))}
                 className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
               >
                 <option>One-Time</option>
@@ -158,7 +179,10 @@ const CardInput: React.FC = () => {
               <textarea
                 value={ability.description}
                 onChange={(e) =>
-                  updateAbility(index, "description", e.target.value)
+                  setCardData((prevState) => ({
+                    ...prevState,
+                    prevState.abilities[index].description = e.target.value
+                  }))
                 }
                 placeholder="Enter Description"
                 className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
