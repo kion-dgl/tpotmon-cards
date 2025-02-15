@@ -101,14 +101,49 @@ const Card3D: React.FC = () => {
           {/* Username */}
           <div
             style={{
-              fontSize: "32px",
+              fontSize: "20px",
               position: "absolute",
               color: "#bbb",
               left: "300px",
-              top: "360px",
+              top: "364px",
             }}
           >
             @WagieWeeb
+          </div>
+
+          {/* Weakness + Resist */}
+          <div
+            style={{
+              fontSize: "20px",
+              position: "absolute",
+              left: "270px",
+              top: "410px",
+              display: "flex",
+            }}
+          >
+            <span
+              style={{
+                backgroundColor: "#ccc",
+                color: "#333",
+                borderTopLeftRadius: "15px",
+                borderBottomLeftRadius: "15px",
+                padding: "2px 10px",
+              }}
+            >
+              Weakness: +30 Goon
+            </span>
+            <span
+              style={{
+                backgroundColor: "#333",
+                color: "#ccc",
+                borderTopRightRadius: "15px",
+                borderBottomRightRadius: "15px",
+                padding: "2px 10px",
+                marginLeft: "10px",
+              }}
+            >
+              Resist: -20 Drama
+            </span>
           </div>
 
           {/* Back of the Card */}
@@ -178,20 +213,121 @@ const Card3D: React.FC = () => {
             style={{
               position: "absolute",
               width: "calc(100% - 60px)",
-              height: "500px",
-              backgroundColor: "pink",
+              height: "630px",
               left: "30px",
-              top: "460px",
-              color: "#000",
+              top: "470px",
+              fontSize: "18px",
             }}
           >
-            <ul>
-              <li>Level: Ultrabie</li>
-              <li>Weakness: Goon</li>
-              <li>Resist: Drama</li>
-              <li>Title: Elder Cringe Lord</li>
-              <li>Card Number: 152/300</li>
-            </ul>
+            <article
+              style={{
+                border: "2px solid #eee",
+                borderRadius: "15px",
+                padding: "10px",
+                marginBottom: "20px",
+              }}
+            >
+              <h3
+                style={{
+                  fontSize: "24px",
+                  marginBottom: "20px",
+                }}
+              >
+                Passive Ability
+              </h3>
+              <p>
+                Kion has strong connections and engages with all of his moots.
+                Kion directly contributes +50 engagement and +10 impressions per
+                turn. Kion boosts the engagement of lowbie cards on the field by
+                +20 and highbie cards by +30.
+              </p>
+            </article>
+            <article
+              style={{
+                backgroundColor: "rgb(61, 84, 102)",
+                borderRadius: "15px",
+                padding: "10px",
+              }}
+            >
+              <div>
+                <h3
+                  style={{
+                    fontSize: "24px",
+                    marginBottom: "20px",
+                  }}
+                >
+                  Attack: Psyop Banger
+                </h3>
+                <p
+                  style={{
+                    marginBottom: "20px",
+                  }}
+                >
+                  Kion crafts a retarded banger. Flip a coin to determine the
+                  outcome.
+                </p>
+                <p
+                  style={{
+                    marginBottom: "20px",
+                  }}
+                >
+                  <b>Heads: </b> Kion crafts a banger that targets a specific
+                  set of nerds and shakes them to their very foundation. While
+                  the impressions damage is low, it causes trauma damage to the
+                  target, freezing them for one turn.
+                </p>
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "flex-end",
+                    marginBottom: "20px",
+                  }}
+                >
+                  <span
+                    style={{
+                      backgroundColor: "rgb(51, 51, 51)",
+                      padding: "2px 10px",
+                      color: "rgb(204, 204, 204)",
+                      fontSize: "20px",
+                      borderRadius: "10px",
+                    }}
+                  >
+                    20 Damage
+                  </span>
+                </div>
+                <p
+                  style={{
+                    marginBottom: "20px",
+                  }}
+                >
+                  <b>Tails: </b> Kion creates a gay post, and while it's can't
+                  be considered remotely funny or tasteful, for some reason his
+                  followers love that gay shit and flock to give likes, and also
+                  to ask him which 7/11 he sucks dick behind.
+                </p>
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "flex-end",
+                    marginBottom: "20px",
+                  }}
+                >
+                  <span
+                    style={{
+                      backgroundColor: "rgb(51, 51, 51)",
+                      padding: "2px 10px",
+                      color: "rgb(204, 204, 204)",
+                      fontSize: "20px",
+                      borderRadius: "10px",
+                    }}
+                  >
+                    60 Damage
+                  </span>
+                </div>
+              </div>
+            </article>
           </div>
 
           {/* Footer */}
