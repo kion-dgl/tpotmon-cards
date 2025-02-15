@@ -119,11 +119,17 @@ const CardInput: React.FC = () => {
           <button
             className="px-3 py-1 bg-green-500 text-white text-sm rounded-lg hover:bg-green-600 disabled:opacity-50"
             onClick={() => {
-              cardData.abilities.push({
-                name: "",
-                type: "Passive",
-                description: "",
-              });
+              setCardData((prevState) => ({
+                ...prevState,
+                abilities: [
+                  ...prevState.abilities,
+                  {
+                    name: "",
+                    type: "Passive",
+                    description: "",
+                  },
+                ],
+              }));
             }}
             disabled={cardData.abilities.length + cardData.attacks.length >= 2}
           >
