@@ -37,8 +37,8 @@ type CardData = {
 const CardInput: React.FC = () => {
   const [cardData, setCardData] = useState<CardData>({
     username: "",
-    profilePic: "",
-    profileBanner: "",
+    profilePic: "", // base64 png
+    profileBanner: "", // base64 png
     followers: 0,
     following: 0,
     weakness: { amount: 0, type: "None" },
@@ -117,7 +117,7 @@ const CardInput: React.FC = () => {
           <label className="text-lg font-medium flex-1">Ability</label>
 
           <button
-            className="px-3 py-1 bg-green-500 text-white text-sm rounded-lg hover:bg-green-600"
+            className="px-3 py-1 bg-green-500 text-white text-sm rounded-lg hover:bg-green-600 disabled:opacity-50"
             onClick={() => {
               cardData.abilities.push({
                 name: "",
@@ -125,15 +125,19 @@ const CardInput: React.FC = () => {
                 description: "",
               });
             }}
-            disabled={cardData.abilities.length + cardData.attacks.length < 2}
+            disabled={cardData.abilities.length + cardData.attacks.length >= 2}
           >
             +
           </button>
           {/* Remove Button */}
           <button
-            className="px-3 py-1 text-sm ml-4 bg-red-500 text-white rounded-lg hover:bg-red-600"
+            className="px-3 py-1 text-sm ml-4 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50"
             onClick={() => {
-              cardData.abilities.pop();
+              console.log("Try to remove");
+              setCardData((prevCard) => ({
+                ...prevCard,
+                abilities: prevCard.abilities.slice(0, -1), // Create a new array without the last element
+              }));
             }}
             disabled={cardData.abilities.length === 0}
           >
