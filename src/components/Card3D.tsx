@@ -22,8 +22,28 @@ const Card3D: React.FC = () => {
             style={{
               backfaceVisibility: "hidden",
             }}
-            className="absolute w-full h-full bg-blue-500 rounded-lg flex items-center justify-center"
+            className="absolute w-full h-full bg-white rounded-lg flex items-center justify-center"
           >
+            <div
+              style={{
+                height: "calc(300px - 14px)",
+                width: "calc(100% - 28px)",
+                display: "block",
+                margin: "auto",
+                marginTop: "14px",
+                backgroundImage: 'url("/banner/kion.jpeg")',
+                backgroundSize: "cover",
+                backgroundOrigin: "center",
+                backgroundPosition: "center",
+                borderTopLeftRadius: "25px",
+                borderTopRightRadius: "25px",
+                borderBottom: "4px solid #ccc",
+                position: "absolute",
+                left: "14px",
+                top: "14px",
+              }}
+            />
+
             <p className="text-white text-2xl">Front of the Card</p>
           </div>
 
