@@ -160,8 +160,12 @@ const CardInput: React.FC = () => {
                 value={ability.name || ""}
                 onChange={(e) =>
                   setCardData((prevState) => {
-                    prevState.abilities[index].name = e.target.value;
-                    return prevState;
+                    const newAbilities = [...prevState.abilities]; // Create a shallow copy of the abilities array
+                    newAbilities[index] = {
+                      ...newAbilities[index],
+                      name: e.target.value,
+                    }; // Create a new object for the specific ability
+                    return { ...prevState, abilities: newAbilities }; // Return a new state object with updated abilities
                   })
                 }
                 placeholder="Enter Name"
@@ -176,9 +180,12 @@ const CardInput: React.FC = () => {
                 value={ability.type}
                 onChange={(e) =>
                   setCardData((prevState) => {
-                    prevState.abilities[index].type = e.target
-                      .value as AbilityTypes;
-                    return prevState;
+                    const newAbilities = [...prevState.abilities]; // Create a shallow copy of the abilities array
+                    newAbilities[index] = {
+                      ...newAbilities[index],
+                      type: e.target.value as AbilityTypes,
+                    }; // Create a new object for the specific ability
+                    return { ...prevState, abilities: newAbilities }; // Return a new state object with updated abilities
                   })
                 }
                 className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
@@ -198,8 +205,12 @@ const CardInput: React.FC = () => {
                 value={ability.description}
                 onChange={(e) =>
                   setCardData((prevState) => {
-                    prevState.abilities[index].description = e.target.value;
-                    return prevState;
+                    const newAbilities = [...prevState.abilities]; // Create a shallow copy of the abilities array
+                    newAbilities[index] = {
+                      ...newAbilities[index],
+                      description: e.target.value,
+                    }; // Create a new object for the specific ability
+                    return { ...prevState, abilities: newAbilities }; // Return a new state object with updated abilities
                   })
                 }
                 placeholder="Enter Description"
