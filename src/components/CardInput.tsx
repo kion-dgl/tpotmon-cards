@@ -139,7 +139,6 @@ const CardInput: React.FC = () => {
           <button
             className="px-3 py-1 text-sm ml-4 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50"
             onClick={() => {
-              console.log("Try to remove");
               setCardData((prevCard) => ({
                 ...prevCard,
                 abilities: prevCard.abilities.slice(0, -1), // Create a new array without the last element
@@ -227,15 +226,21 @@ const CardInput: React.FC = () => {
           <label className="text-lg font-medium flex-1">Attack</label>
 
           <button
-            className="px-3 py-1 bg-green-500 text-white text-sm rounded-lg hover:bg-green-600"
+            className="px-3 py-1 bg-green-500 text-white text-sm rounded-lg hover:bg-green-600 disabled:opacity-50"
             onClick={() => {
-              cardData.attacks.push({
-                name: "",
-                type: "None",
-                damage: 0,
-                chance: "Direct",
-                description: "",
-              });
+              setCardData((prevState) => ({
+                ...prevState,
+                attacks: [
+                  ...prevState.attacks,
+                  {
+                    name: "",
+                    type: "None",
+                    damage: 0,
+                    chance: "Direct",
+                    description: "",
+                  },
+                ],
+              }));
             }}
             disabled={cardData.abilities.length + cardData.attacks.length >= 2}
           >
@@ -243,9 +248,12 @@ const CardInput: React.FC = () => {
           </button>
           {/* Remove Button */}
           <button
-            className="px-3 py-1 text-sm ml-4 bg-red-500 text-white rounded-lg hover:bg-red-600"
+            className="px-3 py-1 text-sm ml-4 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50"
             onClick={() => {
-              cardData.attacks.pop();
+              setCardData((prevCard) => ({
+                ...prevCard,
+                attacks: prevCard.attacks.slice(0, -1), // Create a new array without the last element
+              }));
             }}
             disabled={cardData.attacks.length === 0}
           >
