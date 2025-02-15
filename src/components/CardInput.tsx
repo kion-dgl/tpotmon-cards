@@ -262,7 +262,7 @@ const CardInput: React.FC = () => {
         </div>
         {cardData.attacks.map((attack, index) => (
           <div key={index} className="mb-4">
-            <div key={index} className="mb-4 border-b-1 pb-2 border-gray-700">
+            <div className="mb-4 border-b-1 pb-2 border-gray-700">
               {/* Name */}
               <div className="mb-2">
                 <label className="block text-sm font-medium mb-1">Name</label>
@@ -271,8 +271,12 @@ const CardInput: React.FC = () => {
                   value={attack.name || ""}
                   onChange={(e) =>
                     setCardData((prevState) => {
-                      prevState.attacks[index].name = e.target.value;
-                      return prevState;
+                      const newAttacks = [...prevState.attacks];
+                      newAttacks[index] = {
+                        ...newAttacks[index],
+                        name: e.target.value,
+                      };
+                      return { ...prevState, attacks: newAttacks };
                     })
                   }
                   placeholder="Enter Name"
@@ -280,15 +284,19 @@ const CardInput: React.FC = () => {
                 />
               </div>
 
+              {/* Chance */}
               <div className="mb-2">
                 <label className="block text-sm font-medium mb-1">Chance</label>
                 <select
                   value={attack.chance}
                   onChange={(e) =>
                     setCardData((prevState) => {
-                      prevState.attacks[index].chance = e.target
-                        .value as AttackChance;
-                      return prevState;
+                      const newAttacks = [...prevState.attacks];
+                      newAttacks[index] = {
+                        ...newAttacks[index],
+                        chance: e.target.value as AttackChance,
+                      };
+                      return { ...prevState, attacks: newAttacks };
                     })
                   }
                   className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
@@ -305,11 +313,15 @@ const CardInput: React.FC = () => {
                   Description
                 </label>
                 <textarea
-                  value={attack.description}
+                  value={attack.description || ""}
                   onChange={(e) =>
                     setCardData((prevState) => {
-                      prevState.attacks[index].description = e.target.value;
-                      return prevState;
+                      const newAttacks = [...prevState.attacks];
+                      newAttacks[index] = {
+                        ...newAttacks[index],
+                        description: e.target.value,
+                      };
+                      return { ...prevState, attacks: newAttacks };
                     })
                   }
                   placeholder="Enter Description"
@@ -317,16 +329,19 @@ const CardInput: React.FC = () => {
                 ></textarea>
               </div>
 
-              {/* Chance and Type */}
+              {/* Type */}
               <div className="mb-2">
                 <label className="block text-sm font-medium mb-1">Type</label>
                 <select
                   value={attack.type}
                   onChange={(e) =>
                     setCardData((prevState) => {
-                      prevState.attacks[index].type = e.target
-                        .value as AttackTypes;
-                      return prevState;
+                      const newAttacks = [...prevState.attacks];
+                      newAttacks[index] = {
+                        ...newAttacks[index],
+                        type: e.target.value as AttackTypes,
+                      };
+                      return { ...prevState, attacks: newAttacks };
                     })
                   }
                   className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
