@@ -124,6 +124,7 @@ const Card3D: React.FC = () => {
               left: "270px",
               top: "410px",
               display: "flex",
+              backfaceVisibility: "hidden",
             }}
           >
             <span
@@ -177,6 +178,7 @@ const Card3D: React.FC = () => {
               backgroundColor: "#333",
               borderRadius: "100%",
               fontSize: "32px",
+              backfaceVisibility: "hidden",
             }}
           >
             4
@@ -193,6 +195,7 @@ const Card3D: React.FC = () => {
               color: "#fff",
               fontSize: "50px",
               textAlign: "right",
+              backfaceVisibility: "hidden",
             }}
           >
             100 HP
@@ -208,6 +211,7 @@ const Card3D: React.FC = () => {
               fontSize: "20px",
               textAlign: "right",
               textShadow: "0px 4px 4px rgba(0, 0, 0, 0.8)",
+              backfaceVisibility: "hidden",
             }}
           >
             3,000 Followers 1,500 Following
@@ -223,6 +227,7 @@ const Card3D: React.FC = () => {
               top: "470px",
               fontSize: "18px",
               color: isDark ? "#eee" : "#222",
+              backfaceVisibility: "hidden",
             }}
           >
             <article
@@ -354,6 +359,7 @@ const Card3D: React.FC = () => {
               fontSize: "20px",
               margin: "0 auto",
               color: isDark ? "#eee" : "#222",
+              backfaceVisibility: "hidden",
             }}
           >
             <span
