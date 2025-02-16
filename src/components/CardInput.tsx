@@ -359,26 +359,57 @@ const CardInput: React.FC = () => {
       {/* Weakness */}
       <div className="mb-4">
         <label className="block text-sm font-medium mb-2">Weakness</label>
-        <div className="flex gap-4">
+        <div className="flex gap-4 items-center">
+          <button
+            type="button"
+            onClick={() =>
+              setCardData((prevState) => {
+                const newAmount = Math.max(0, prevState.weakness.amount - 10);
+                return {
+                  ...prevState,
+                  weakness: { ...prevState.weakness, amount: newAmount },
+                };
+              })
+            }
+            className="px-2 py-1 border rounded-lg bg-gray-300 dark:bg-gray-700 dark:text-gray-200"
+          >
+            -
+          </button>
+
           <input
             type="number"
             value={cardData.weakness.amount}
-            min="0"
-            max="100"
-            onChange={(e) =>
+            readOnly
+            className="w-16 text-center px-2 py-1 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+          />
+
+          <button
+            type="button"
+            onClick={() =>
               setCardData((prevState) => {
-                prevState.weakness.amount = parseInt(e.target.value);
-                return prevState;
+                const newAmount = Math.min(100, prevState.weakness.amount + 10);
+                return {
+                  ...prevState,
+                  weakness: { ...prevState.weakness, amount: newAmount },
+                };
               })
             }
-            className="w-1/2 px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
-          />
+            className="px-2 py-1 border rounded-lg bg-gray-300 dark:bg-gray-700 dark:text-gray-200"
+          >
+            +
+          </button>
+
           <select
             value={cardData.weakness.type}
             onChange={(e) =>
               setCardData((prevState) => {
-                prevState.weakness.type = e.target.value as AttackTypes;
-                return prevState;
+                return {
+                  ...prevState,
+                  weakness: {
+                    ...prevState.weakness,
+                    type: e.target.value as AttackTypes,
+                  },
+                };
               })
             }
             className="w-1/2 px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
