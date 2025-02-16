@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 const Card3D: React.FC = () => {
   const [flipped, setFlipped] = useState(false);
+  const [isDark, updateIsDark] = useState(false);
 
   return (
     <div className="flex flex-col items-center">
@@ -21,9 +22,11 @@ const Card3D: React.FC = () => {
           <div
             style={{
               backfaceVisibility: "hidden",
-              boxShadow: "inset 0 0 0 14px rgb(0,0,0)",
-              borderRadius: "35px",
-              backgroundColor: "rgb(21, 32, 43)",
+              boxShadow: isDark
+                ? "inset 0 0 0 14px rgb(0,0,0)"
+                : "inset 0 0 0 14px rgb(120,120,120)",
+              borderRadius: "40px",
+              backgroundColor: isDark ? "rgb(21, 32, 43)" : "#fff",
             }}
             className="absolute w-full h-full flex items-center justify-center"
           >
@@ -41,13 +44,14 @@ const Card3D: React.FC = () => {
                 backgroundPosition: "center",
                 borderTopLeftRadius: "25px",
                 borderTopRightRadius: "25px",
-                borderBottom: "4px solid #ccc",
+                borderBottom: isDark ? "4px solid #ccc" : "4px solid #555",
                 position: "absolute",
                 left: "14px",
                 top: "0px",
               }}
             />
           </div>
+          {/* End Front of Card */}
 
           {/* Profile pic */}
           <div
@@ -59,7 +63,7 @@ const Card3D: React.FC = () => {
               backgroundSize: "contain",
               backgroundOrigin: "center",
               backgroundPosition: "center",
-              border: "6px solid #fff",
+              border: isDark ? "6px solid #fff" : "6px solid #444",
               position: "absolute",
               top: "210px",
               left: "40px",
@@ -76,6 +80,7 @@ const Card3D: React.FC = () => {
               position: "absolute",
               left: "300px",
               top: "320px",
+              color: isDark ? "#fff" : "#000",
             }}
           >
             Kion{" "}
@@ -103,7 +108,7 @@ const Card3D: React.FC = () => {
             style={{
               fontSize: "20px",
               position: "absolute",
-              color: "#bbb",
+              color: isDark ? "#bbb" : "#444",
               left: "300px",
               top: "364px",
             }}
@@ -217,11 +222,12 @@ const Card3D: React.FC = () => {
               left: "30px",
               top: "470px",
               fontSize: "18px",
+              color: isDark ? "#eee" : "#222",
             }}
           >
             <article
               style={{
-                border: "2px solid #eee",
+                border: isDark ? "2px solid #eee" : "2px solid #333",
                 borderRadius: "15px",
                 padding: "10px",
                 marginBottom: "20px",
@@ -244,7 +250,7 @@ const Card3D: React.FC = () => {
             </article>
             <article
               style={{
-                backgroundColor: "rgb(61, 84, 102)",
+                backgroundColor: isDark ? "rgb(61, 84, 102)" : "#ddd",
                 borderRadius: "15px",
                 padding: "10px",
               }}
@@ -347,6 +353,7 @@ const Card3D: React.FC = () => {
               textAlign: "center",
               fontSize: "20px",
               margin: "0 auto",
+              color: isDark ? "#eee" : "#222",
             }}
           >
             <span
@@ -388,12 +395,21 @@ const Card3D: React.FC = () => {
         </div>
       </div>
 
-      <button
-        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg"
-        onClick={() => setFlipped(!flipped)}
-      >
-        Flip Card
-      </button>
+      <div className="flex space-x-4">
+        <button
+          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg"
+          onClick={() => setFlipped(!flipped)}
+        >
+          Flip Card
+        </button>
+
+        <button
+          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg"
+          onClick={() => updateIsDark(!isDark)}
+        >
+          Toggle Theme
+        </button>
+      </div>
     </div>
   );
 };

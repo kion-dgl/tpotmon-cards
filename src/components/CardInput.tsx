@@ -301,9 +301,9 @@ const CardInput: React.FC = () => {
                   }
                   className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                 >
-                  <option>Thirst</option>
-                  <option>Goon</option>
-                  <option>Roast</option>
+                  <option>Direct</option>
+                  <option>Coin Flip</option>
+                  <option>Dice Roll</option>
                 </select>
               </div>
 
