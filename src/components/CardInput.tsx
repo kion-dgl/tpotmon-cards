@@ -473,7 +473,10 @@ const CardInput: React.FC = () => {
               setCardData((prevState) => {
                 return {
                   ...prevState,
-                  resists: { ...prevState.resists, type: e.target.value },
+                  resists: {
+                    ...prevState.resists,
+                    type: e.target.value as AttackTypes,
+                  },
                 };
               })
             }
