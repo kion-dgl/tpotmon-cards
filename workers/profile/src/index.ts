@@ -11,6 +11,33 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
+interface TwitterApiResponse {
+	status: string;
+	msg: string;
+	data: {
+		id: string;
+		name: string;
+		userName: string;
+		location: string;
+		url: string;
+		description: string;
+		protected: boolean;
+		isVerified: boolean;
+		isBlueVerified: boolean;
+		followers: number;
+		following: number;
+		favouritesCount: number;
+		statusesCount: number;
+		mediaCount: number;
+		createdAt: string;
+		coverPicture: string;
+		profilePicture: string;
+		canDm: boolean;
+		isAutomated: boolean;
+		automatedBy: string | null;
+	};
+}
+
 export default {
 	async fetch(request: Request, env: Env): Promise<Response> {
 		const url = new URL(request.url);
@@ -25,25 +52,41 @@ export default {
 		}
 
 		try {
-			// Make the call to the Twitter API
 			const apiUrl = `https://api.twitterapi.io/twitter/user/info?userName=${username}`;
-			const response = await fetch(apiUrl, {
+			const twitterResponse = await fetch(apiUrl, {
 				method: 'GET',
-				headers: {
-					'X-API-Key': twitterApiKey,
-				},
+				headers: { 'X-API-Key': twitterApiKey },
 			});
 
-			// Check if the response is OK
-			if (!response.ok) {
-				throw new Error(`Twitter API request failed with status ${response.status}`);
+			if (!twitterResponse.ok) {
+				throw new Error(`Twitter API request failed with status ${twitterResponse.status}`);
 			}
 
-			// Parse the response
-			const data = await response.json();
+			const twitterApiResponse = (await twitterResponse.json()) as TwitterApiResponse;
+			const { data } = twitterApiResponse;
 
-			// Return the data as JSON
-			return new Response(JSON.stringify(data), {
+			if (!data) {
+				throw new Error('No data received from Twitter API');
+			}
+
+			// Convert images to base64
+			const profilePictureBase64 = await convertToBase64(data.profilePicture);
+
+			console.log(data);
+			const coverPictureBase64 = await convertToBase64(data.coverPicture);
+
+			// Return only the requested fields
+			const response = {
+				name: data.name,
+				username: data.userName,
+				isBlueVerified: data.isBlueVerified,
+				followers: data.followers,
+				following: data.following,
+				profilePicture: profilePictureBase64,
+				coverPicture: coverPictureBase64,
+			};
+
+			return new Response(JSON.stringify(response), {
 				status: 200,
 				headers: {
 					'Content-Type': 'application/json',
@@ -51,7 +94,7 @@ export default {
 				},
 			});
 		} catch (error) {
-			console.error(error); // Log the error to Wrangler console
+			console.error(error);
 			return new Response(JSON.stringify({ error: 'Failed to fetch data from Twitter API' }), {
 				status: 500,
 				headers: { 'Content-Type': 'application/json' },
@@ -59,6 +102,33 @@ export default {
 		}
 	},
 } satisfies ExportedHandler<Env>;
+
+// Helper function to fetch an image and convert it to a base64 string
+async function convertToBase64(imageUrl: string): Promise<string> {
+	try {
+		const imageResponse = await fetch(imageUrl);
+		if (!imageResponse.ok) {
+			throw new Error(`Failed to fetch image at ${imageUrl}`);
+		}
+
+		const arrayBuffer = await imageResponse.arrayBuffer();
+		const byteArray = new Uint8Array(arrayBuffer);
+
+		// Convert in chunks to avoid exceeding the stack size
+		let chunkSize = 8192; // Process 8192 bytes at a time
+		let base64String = '';
+		for (let i = 0; i < byteArray.length; i += chunkSize) {
+			const chunk = byteArray.slice(i, i + chunkSize);
+			base64String += String.fromCharCode(...chunk);
+		}
+
+		const mimeType = imageResponse.headers.get('Content-Type') || 'image/jpeg';
+		return `data:${mimeType};base64,${btoa(base64String)}`;
+	} catch (error) {
+		console.error(`Error converting image to base64: ${error}`);
+		return '';
+	}
+}
 
 interface Env {
 	TWITTER_API_KEY: string;
