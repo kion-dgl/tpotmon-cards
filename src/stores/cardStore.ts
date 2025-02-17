@@ -88,3 +88,5 @@ onMount(cardDataStore, () => {
 export const setCardData = (newData: CardData) => {
   cardDataStore.set(newData);
 };
+
+export type { AttackChance, AttackTypes, AbilityTypes };

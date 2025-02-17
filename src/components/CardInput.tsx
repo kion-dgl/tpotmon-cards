@@ -1,61 +1,10 @@
 import React, { useState } from "react";
-
-type AttackTypes = "None" | "Goon" | "Thirst" | "Gaslight" | "Roast";
-type AttackChance = "Direct" | "Dice Roll" | "Coin Flip";
-type AbilityTypes = "One-Time" | "Passive" | "Active";
-
-type Ability = {
-  type: AbilityTypes;
-  name: string;
-  description: string;
-};
-
-type Attack = {
-  name: string;
-  chance: AttackChance;
-  type: AttackTypes;
-  damage: number;
-  description: string;
-};
-
-type CardData = {
-  name: string;
-  username: string;
-  profilePic: string;
-  profileBanner: string;
-  followers: number;
-  following: number;
-  isBlueCheck: boolean;
-  weakness: { amount: number; type: AttackTypes };
-  resists: { amount: number; type: AttackTypes };
-  createdOn: Date;
-  rarity: string;
-  hp: string;
-  abilities: Ability[];
-  attacks: Attack[];
-  title: string;
-};
+import { useStore } from "@nanostores/react";
+import { cardDataStore, setCardData } from "../stores/cardStore"; // Import store
+import type { AbilityTypes } from "../stores/cardStore";
 
 const CardInput: React.FC = () => {
-  const [cardData, setCardData] = useState<CardData>({
-    name: "",
-    username: "",
-    profilePic: "", // base64 png
-    profileBanner: "", // base64 png
-    followers: 0,
-    following: 0,
-    isBlueCheck: false,
-    weakness: { amount: 0, type: "None" },
-    resists: { amount: 0, type: "None" },
-    createdOn: new Date(),
-    rarity: "",
-    hp: "",
-    abilities: [{ name: "", type: "Passive", description: "" }],
-    attacks: [
-      { name: "", type: "None", damage: 0, chance: "Direct", description: "" },
-    ],
-    title: "",
-  });
+  const cardData = useStore(cardDataStore);
 
   const downloadCardData = () => {
     const json = JSON.stringify(cardData, null, 2);
@@ -102,10 +51,10 @@ const CardInput: React.FC = () => {
           type="text"
           value={cardData.username}
           onChange={(e) =>
-            setCardData((prevState) => ({
-              ...prevState,
+            setCardData({
+              ...cardData,
               username: e.target.value,
-            }))
+            })
           }
           placeholder="Enter username"
           className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
@@ -128,10 +77,10 @@ const CardInput: React.FC = () => {
           type="number"
           value={cardData.hp}
           onChange={(e) =>
-            setCardData((prevState) => ({
-              ...prevState,
+            setCardData({
+              ...cardData,
               hp: e.target.value,
-            }))
+            })
           }
           placeholder="Enter HP"
           className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
@@ -146,17 +95,17 @@ const CardInput: React.FC = () => {
           <button
             className="px-3 py-1 bg-green-500 text-white text-sm rounded-lg hover:bg-green-600 disabled:opacity-50"
             onClick={() => {
-              setCardData((prevState) => ({
-                ...prevState,
+              setCardData({
+                ...cardData,
                 abilities: [
-                  ...prevState.abilities,
+                  ...cardData.abilities,
                   {
                     name: "",
                     type: "Passive",
                     description: "",
                   },
                 ],
-              }));
+              });
             }}
             disabled={cardData.abilities.length + cardData.attacks.length >= 2}
           >
@@ -166,10 +115,10 @@ const CardInput: React.FC = () => {
           <button
             className="px-3 py-1 text-sm ml-4 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50"
             onClick={() => {
-              setCardData((prevCard) => ({
-                ...prevCard,
-                abilities: prevCard.abilities.slice(0, -1), // Create a new array without the last element
-              }));
+              setCardData({
+                ...cardData,
+                abilities: cardData.abilities.slice(0, -1), // Create a new array without the last element
+              });
             }}
             disabled={cardData.abilities.length === 0}
           >
@@ -184,16 +133,18 @@ const CardInput: React.FC = () => {
               <input
                 type="text"
                 value={ability.name || ""}
-                onChange={(e) =>
-                  setCardData((prevState) => {
-                    const newAbilities = [...prevState.abilities]; // Create a shallow copy of the abilities array
-                    newAbilities[index] = {
-                      ...newAbilities[index],
-                      name: e.target.value,
-                    }; // Create a new object for the specific ability
-                    return { ...prevState, abilities: newAbilities }; // Return a new state object with updated abilities
-                  })
-                }
+                onChange={(e) => {
+                  const newAbilities = [...cardData.abilities]; // Create a shallow copy of the abilities array
+                  newAbilities[index] = {
+                    ...newAbilities[index],
+                    name: e.target.value,
+                  };
+
+                  setCardData({
+                    ...cardData,
+                    abilities: newAbilities,
+                  });
+                }}
                 placeholder="Enter Name"
                 className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
               />
@@ -204,16 +155,18 @@ const CardInput: React.FC = () => {
               <label className="block text-sm font-medium mb-1">Type</label>
               <select
                 value={ability.type}
-                onChange={(e) =>
-                  setCardData((prevState) => {
-                    const newAbilities = [...prevState.abilities]; // Create a shallow copy of the abilities array
-                    newAbilities[index] = {
-                      ...newAbilities[index],
-                      type: e.target.value as AbilityTypes,
-                    }; // Create a new object for the specific ability
-                    return { ...prevState, abilities: newAbilities }; // Return a new state object with updated abilities
-                  })
-                }
+                onChange={(e) => {
+                  const newAbilities = [...cardData.abilities]; // Create a shallow copy of the abilities array
+                  newAbilities[index] = {
+                    ...newAbilities[index],
+                    type: e.target.value as AbilityTypes,
+                  };
+
+                  setCardData({
+                    ...cardData,
+                    abilities: newAbilities,
+                  });
+                }}
                 className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
               >
                 <option>One-Time</option>
@@ -229,16 +182,18 @@ const CardInput: React.FC = () => {
               </label>
               <textarea
                 value={ability.description}
-                onChange={(e) =>
-                  setCardData((prevState) => {
-                    const newAbilities = [...prevState.abilities]; // Create a shallow copy of the abilities array
-                    newAbilities[index] = {
-                      ...newAbilities[index],
-                      description: e.target.value,
-                    }; // Create a new object for the specific ability
-                    return { ...prevState, abilities: newAbilities }; // Return a new state object with updated abilities
-                  })
-                }
+                onChange={(e) => {
+                  const newAbilities = [...cardData.abilities]; // Create a shallow copy of the abilities array
+                  newAbilities[index] = {
+                    ...newAbilities[index],
+                    description: e.target.value,
+                  };
+
+                  setCardData({
+                    ...cardData,
+                    abilities: newAbilities,
+                  });
+                }}
                 placeholder="Enter Description"
                 className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
               ></textarea>
