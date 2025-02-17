@@ -90,4 +90,10 @@ export const setCardData = (newData: CardData) => {
   localStorage.setItem("cardData", JSON.stringify(newData));
 };
 
+export const resetCardData = () => {
+  const newData = getDefaultCardData();
+  cardDataStore.set(newData);
+  localStorage.setItem("cardData", JSON.stringify(newData));
+};
+
 export type { AttackChance, AttackTypes, AbilityTypes };
