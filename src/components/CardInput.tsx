@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { useStore } from "@nanostores/react";
 import { cardDataStore, setCardData } from "../stores/cardStore"; // Import store
-import type { AbilityTypes } from "../stores/cardStore";
+import type {
+  AbilityTypes,
+  AttackChance,
+  AttackTypes,
+} from "../stores/cardStore";
 
 const CardInput: React.FC = () => {
   const cardData = useStore(cardDataStore);
@@ -210,10 +214,10 @@ const CardInput: React.FC = () => {
           <button
             className="px-3 py-1 bg-green-500 text-white text-sm rounded-lg hover:bg-green-600 disabled:opacity-50"
             onClick={() => {
-              setCardData((prevState) => ({
-                ...prevState,
+              setCardData({
+                ...cardData,
                 attacks: [
-                  ...prevState.attacks,
+                  ...cardData.attacks,
                   {
                     name: "",
                     type: "None",
@@ -222,7 +226,7 @@ const CardInput: React.FC = () => {
                     description: "",
                   },
                 ],
-              }));
+              });
             }}
             disabled={cardData.abilities.length + cardData.attacks.length >= 2}
           >
@@ -232,10 +236,10 @@ const CardInput: React.FC = () => {
           <button
             className="px-3 py-1 text-sm ml-4 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50"
             onClick={() => {
-              setCardData((prevCard) => ({
-                ...prevCard,
-                attacks: prevCard.attacks.slice(0, -1), // Create a new array without the last element
-              }));
+              setCardData({
+                ...cardData,
+                attacks: cardData.attacks.slice(0, -1), // Create a new array without the last element
+              });
             }}
             disabled={cardData.attacks.length === 0}
           >
@@ -251,16 +255,14 @@ const CardInput: React.FC = () => {
                 <input
                   type="text"
                   value={attack.name || ""}
-                  onChange={(e) =>
-                    setCardData((prevState) => {
-                      const newAttacks = [...prevState.attacks];
-                      newAttacks[index] = {
-                        ...newAttacks[index],
-                        name: e.target.value,
-                      };
-                      return { ...prevState, attacks: newAttacks };
-                    })
-                  }
+                  onChange={(e) => {
+                    const newAttacks = [...cardData.attacks];
+                    newAttacks[index] = {
+                      ...newAttacks[index],
+                      name: e.target.value,
+                    };
+                    setCardData({ ...cardData, attacks: newAttacks });
+                  }}
                   placeholder="Enter Name"
                   className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                 />
@@ -271,16 +273,14 @@ const CardInput: React.FC = () => {
                 <label className="block text-sm font-medium mb-1">Chance</label>
                 <select
                   value={attack.chance}
-                  onChange={(e) =>
-                    setCardData((prevState) => {
-                      const newAttacks = [...prevState.attacks];
-                      newAttacks[index] = {
-                        ...newAttacks[index],
-                        chance: e.target.value as AttackChance,
-                      };
-                      return { ...prevState, attacks: newAttacks };
-                    })
-                  }
+                  onChange={(e) => {
+                    const newAttacks = [...cardData.attacks];
+                    newAttacks[index] = {
+                      ...newAttacks[index],
+                      chance: e.target.value as AttackChance,
+                    };
+                    setCardData({ ...cardData, attacks: newAttacks });
+                  }}
                   className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                 >
                   <option>Direct</option>
@@ -296,16 +296,14 @@ const CardInput: React.FC = () => {
                 </label>
                 <textarea
                   value={attack.description || ""}
-                  onChange={(e) =>
-                    setCardData((prevState) => {
-                      const newAttacks = [...prevState.attacks];
-                      newAttacks[index] = {
-                        ...newAttacks[index],
-                        description: e.target.value,
-                      };
-                      return { ...prevState, attacks: newAttacks };
-                    })
-                  }
+                  onChange={(e) => {
+                    const newAttacks = [...cardData.attacks];
+                    newAttacks[index] = {
+                      ...newAttacks[index],
+                      description: e.target.value,
+                    };
+                    setCardData({ ...cardData, attacks: newAttacks });
+                  }}
                   placeholder="Enter Description"
                   className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                 ></textarea>
@@ -316,16 +314,15 @@ const CardInput: React.FC = () => {
                 <label className="block text-sm font-medium mb-1">Type</label>
                 <select
                   value={attack.type}
-                  onChange={(e) =>
-                    setCardData((prevState) => {
-                      const newAttacks = [...prevState.attacks];
-                      newAttacks[index] = {
-                        ...newAttacks[index],
-                        type: e.target.value as AttackTypes,
-                      };
-                      return { ...prevState, attacks: newAttacks };
-                    })
-                  }
+                  onChange={(e) => {
+                    const newAttacks = [...cardData.attacks];
+                    newAttacks[index] = {
+                      ...newAttacks[index],
+                      type: e.target.value as AttackTypes,
+                    };
+
+                    setCardData({ ...cardData, attacks: newAttacks });
+                  }}
                   className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                 >
                   <option>Thirst</option>
@@ -344,15 +341,14 @@ const CardInput: React.FC = () => {
         <div className="flex gap-4 items-center">
           <button
             type="button"
-            onClick={() =>
-              setCardData((prevState) => {
-                const newAmount = Math.max(0, prevState.weakness.amount - 10);
-                return {
-                  ...prevState,
-                  weakness: { ...prevState.weakness, amount: newAmount },
-                };
-              })
-            }
+            onClick={() => {
+              const newAmount = Math.min(100, cardData.weakness.amount - 10);
+
+              setCardData({
+                ...cardData,
+                weakness: { ...cardData.weakness, amount: newAmount },
+              });
+            }}
             className="px-2 py-1 border rounded-lg bg-gray-300 dark:bg-gray-700 dark:text-gray-200"
           >
             -
@@ -367,15 +363,14 @@ const CardInput: React.FC = () => {
 
           <button
             type="button"
-            onClick={() =>
-              setCardData((prevState) => {
-                const newAmount = Math.min(100, prevState.weakness.amount + 10);
-                return {
-                  ...prevState,
-                  weakness: { ...prevState.weakness, amount: newAmount },
-                };
-              })
-            }
+            onClick={() => {
+              const newAmount = Math.min(100, cardData.weakness.amount + 10);
+
+              setCardData({
+                ...cardData,
+                weakness: { ...cardData.weakness, amount: newAmount },
+              });
+            }}
             className="px-2 py-1 border rounded-lg bg-gray-300 dark:bg-gray-700 dark:text-gray-200"
           >
             +
@@ -384,14 +379,12 @@ const CardInput: React.FC = () => {
           <select
             value={cardData.weakness.type}
             onChange={(e) =>
-              setCardData((prevState) => {
-                return {
-                  ...prevState,
-                  weakness: {
-                    ...prevState.weakness,
-                    type: e.target.value as AttackTypes,
-                  },
-                };
+              setCardData({
+                ...cardData,
+                weakness: {
+                  ...cardData.weakness,
+                  type: e.target.value as AttackTypes,
+                },
               })
             }
             className="w-1/2 px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
@@ -412,15 +405,13 @@ const CardInput: React.FC = () => {
         <div className="flex gap-4 items-center">
           <button
             type="button"
-            onClick={() =>
-              setCardData((prevState) => {
-                const newAmount = Math.max(0, prevState.resists.amount - 10);
-                return {
-                  ...prevState,
-                  resists: { ...prevState.resists, amount: newAmount },
-                };
-              })
-            }
+            onClick={() => {
+              const newAmount = Math.max(0, cardData.resists.amount - 10);
+              setCardData({
+                ...cardData,
+                resists: { ...cardData.resists, amount: newAmount },
+              });
+            }}
             className="px-2 py-1 border rounded-lg bg-gray-300 dark:bg-gray-700 dark:text-gray-200"
           >
             -
@@ -435,15 +426,13 @@ const CardInput: React.FC = () => {
 
           <button
             type="button"
-            onClick={() =>
-              setCardData((prevState) => {
-                const newAmount = Math.min(100, prevState.resists.amount + 10);
-                return {
-                  ...prevState,
-                  resists: { ...prevState.resists, amount: newAmount },
-                };
-              })
-            }
+            onClick={() => {
+              const newAmount = Math.min(100, cardData.resists.amount - 10);
+              setCardData({
+                ...cardData,
+                resists: { ...cardData.resists, amount: newAmount },
+              });
+            }}
             className="px-2 py-1 border rounded-lg bg-gray-300 dark:bg-gray-700 dark:text-gray-200"
           >
             +
@@ -452,14 +441,12 @@ const CardInput: React.FC = () => {
           <select
             value={cardData.resists.type}
             onChange={(e) =>
-              setCardData((prevState) => {
-                return {
-                  ...prevState,
-                  resists: {
-                    ...prevState.resists,
-                    type: e.target.value as AttackTypes,
-                  },
-                };
+              setCardData({
+                ...cardData,
+                resists: {
+                  ...cardData.resists,
+                  type: e.target.value as AttackTypes,
+                },
               })
             }
             className="w-1/2 px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
@@ -480,10 +467,10 @@ const CardInput: React.FC = () => {
         <select
           value={cardData.rarity}
           onChange={(e) =>
-            setCardData((prevState) => ({
-              ...prevState,
+            setCardData({
+              ...cardData,
               rarity: e.target.value,
-            }))
+            })
           }
           className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
         >
@@ -501,10 +488,10 @@ const CardInput: React.FC = () => {
           type="text"
           value={cardData.title}
           onChange={(e) =>
-            setCardData((prevState) => ({
-              ...prevState,
+            setCardData({
+              ...cardData,
               title: e.target.value,
-            }))
+            })
           }
           placeholder="Enter Title"
           className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
