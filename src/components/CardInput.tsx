@@ -23,19 +23,6 @@ const CardInput: React.FC = () => {
     localStorage.getItem("user-set") ? true : false,
   );
 
-  const downloadCardData = () => {
-    const json = JSON.stringify(cardData, null, 2);
-    const blob = new Blob([json], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `${cardData.username || "card-data"}.json`;
-    link.click();
-
-    URL.revokeObjectURL(url);
-  };
-
   const fetchProfile = async () => {
     if (!cardData.username) {
       alert("Please enter a username.");
@@ -550,13 +537,29 @@ const CardInput: React.FC = () => {
       </div>
 
       {/* Download Image & JSON */}
-      <div className="mb-4">
+      <div className="mb-4 flex space-x-4">
         <button
-          className="w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none"
-          onClick={downloadCardData}
+          className="w-1/2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none"
+          onClick={(e) => {
+            const json = JSON.stringify(cardData, null, 2); // Assuming `editorOutput` holds the JSON
+            navigator.clipboard
+              .writeText(json)
+              .then(() => {
+                alert("JSON copied to clipboard!");
+              })
+              .catch((err) => console.error("Copy failed", err));
+          }}
         >
-          Download Card Data (JSON)
+          Copy Card Data
         </button>
+
+        <a
+          className="w-1/2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none"
+          target="_blank"
+          href={`https://github.com/kion-dgl/tpotmon-cards/new/main/collections?filename=${cardData.username}.json`}
+        >
+          Create Card
+        </a>
       </div>
     </div>
   );
