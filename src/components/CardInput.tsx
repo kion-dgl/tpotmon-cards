@@ -66,6 +66,29 @@ const CardInput: React.FC = () => {
     URL.revokeObjectURL(url);
   };
 
+  const fetchProfile = async () => {
+    if (!cardData.username) {
+      alert("Please enter a username.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `https://profile.kion-87a.workers.dev/?username=${cardData.username}`,
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch profile");
+      }
+
+      const profileData = await response.json();
+      console.log(profileData);
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+      alert("There was an error fetching the profile.");
+    }
+  };
+
   return (
     <div className="sm:w-full lg:w-lg p-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
       {/* Username */}
@@ -88,7 +111,7 @@ const CardInput: React.FC = () => {
       <div className="mb-4">
         <button
           className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-          onClick={() => alert("Fetch profile logic goes here")}
+          onClick={fetchProfile}
         >
           Fetch Profile
         </button>
