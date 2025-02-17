@@ -87,6 +87,7 @@ onMount(cardDataStore, () => {
 // Function to set the entire new state (without merging manually)
 export const setCardData = (newData: CardData) => {
   cardDataStore.set(newData);
+  localStorage.setItem("cardData", JSON.stringify(newData));
 };
 
 export type { AttackChance, AttackTypes, AbilityTypes };

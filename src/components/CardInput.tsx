@@ -342,7 +342,7 @@ const CardInput: React.FC = () => {
           <button
             type="button"
             onClick={() => {
-              const newAmount = Math.min(100, cardData.weakness.amount - 10);
+              const newAmount = Math.max(0, cardData.weakness.amount - 10);
 
               setCardData({
                 ...cardData,
@@ -427,7 +427,7 @@ const CardInput: React.FC = () => {
           <button
             type="button"
             onClick={() => {
-              const newAmount = Math.min(100, cardData.resists.amount - 10);
+              const newAmount = Math.min(100, cardData.resists.amount + 10);
               setCardData({
                 ...cardData,
                 resists: { ...cardData.resists, amount: newAmount },
