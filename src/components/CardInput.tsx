@@ -19,6 +19,9 @@ type ProfileWorkerResponse = {
 
 const CardInput: React.FC = () => {
   const cardData = useStore(cardDataStore);
+  const [locked, setLocked] = useState(
+    localStorage.getItem("user-set") ? true : false,
+  );
 
   const downloadCardData = () => {
     const json = JSON.stringify(cardData, null, 2);
@@ -60,7 +63,8 @@ const CardInput: React.FC = () => {
         isBlueCheck: profileData.isBlueVerified,
       });
 
-      console.log(profileData);
+      setLocked(true);
+      localStorage.setItem("user-set", "true");
     } catch (error) {
       console.error("Error fetching profile:", error);
       alert("There was an error fetching the profile.");
@@ -82,14 +86,16 @@ const CardInput: React.FC = () => {
             })
           }
           placeholder="Enter username"
-          className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+          className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 disabled:opacity-60"
+          disabled={locked}
         />
       </div>
 
       <div className="mb-4">
         <button
-          className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+          className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50"
           onClick={fetchProfile}
+          disabled={locked}
         >
           Fetch Profile
         </button>
@@ -108,7 +114,8 @@ const CardInput: React.FC = () => {
             })
           }
           placeholder="Enter HP"
-          className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+          className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 disabled:opacity-50"
+          disabled={!locked}
         />
       </div>
 
@@ -132,7 +139,10 @@ const CardInput: React.FC = () => {
                 ],
               });
             }}
-            disabled={cardData.abilities.length + cardData.attacks.length >= 2}
+            disabled={
+              cardData.abilities.length + cardData.attacks.length >= 2 ||
+              !locked
+            }
           >
             +
           </button>
@@ -145,7 +155,7 @@ const CardInput: React.FC = () => {
                 abilities: cardData.abilities.slice(0, -1), // Create a new array without the last element
               });
             }}
-            disabled={cardData.abilities.length === 0}
+            disabled={cardData.abilities.length === 0 || !locked}
           >
             -
           </button>
@@ -171,7 +181,8 @@ const CardInput: React.FC = () => {
                   });
                 }}
                 placeholder="Enter Name"
-                className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 disabled:opacity-50"
+                disabled={!locked}
               />
             </div>
 
@@ -192,7 +203,8 @@ const CardInput: React.FC = () => {
                     abilities: newAbilities,
                   });
                 }}
-                className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 disabled:opacity-50"
+                disabled={!locked}
               >
                 <option>One-Time</option>
                 <option>Passive</option>
@@ -220,7 +232,8 @@ const CardInput: React.FC = () => {
                   });
                 }}
                 placeholder="Enter Description"
-                className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 disabled:opacity-50"
+                disabled={!locked}
               ></textarea>
             </div>
           </div>
@@ -249,7 +262,10 @@ const CardInput: React.FC = () => {
                 ],
               });
             }}
-            disabled={cardData.abilities.length + cardData.attacks.length >= 2}
+            disabled={
+              cardData.abilities.length + cardData.attacks.length >= 2 ||
+              !locked
+            }
           >
             +
           </button>
@@ -262,7 +278,7 @@ const CardInput: React.FC = () => {
                 attacks: cardData.attacks.slice(0, -1), // Create a new array without the last element
               });
             }}
-            disabled={cardData.attacks.length === 0}
+            disabled={cardData.attacks.length === 0 || !locked}
           >
             -
           </button>
@@ -285,7 +301,8 @@ const CardInput: React.FC = () => {
                     setCardData({ ...cardData, attacks: newAttacks });
                   }}
                   placeholder="Enter Name"
-                  className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                  className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 disabled:opacity-50"
+                  disabled={!locked}
                 />
               </div>
 
@@ -302,7 +319,8 @@ const CardInput: React.FC = () => {
                     };
                     setCardData({ ...cardData, attacks: newAttacks });
                   }}
-                  className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                  className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 disabled:opacity-50"
+                  disabled={!locked}
                 >
                   <option>Direct</option>
                   <option>Coin Flip</option>
@@ -326,7 +344,8 @@ const CardInput: React.FC = () => {
                     setCardData({ ...cardData, attacks: newAttacks });
                   }}
                   placeholder="Enter Description"
-                  className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                  className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 disabled:opacity-50"
+                  disabled={!locked}
                 ></textarea>
               </div>
 
@@ -344,7 +363,8 @@ const CardInput: React.FC = () => {
 
                     setCardData({ ...cardData, attacks: newAttacks });
                   }}
-                  className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                  className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 disabled:opacity-50"
+                  disabled={!locked}
                 >
                   <option>Thirst</option>
                   <option>Goon</option>
@@ -370,7 +390,8 @@ const CardInput: React.FC = () => {
                 weakness: { ...cardData.weakness, amount: newAmount },
               });
             }}
-            className="px-2 py-1 border rounded-lg bg-gray-300 dark:bg-gray-700 dark:text-gray-200"
+            className="px-2 py-1 border rounded-lg bg-gray-300 dark:bg-gray-700 dark:text-gray-200 disabled:opacity-50"
+            disabled={!locked}
           >
             -
           </button>
@@ -379,7 +400,8 @@ const CardInput: React.FC = () => {
             type="number"
             value={cardData.weakness.amount}
             readOnly
-            className="w-16 text-center px-2 py-1 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+            className="w-16 text-center px-2 py-1 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 disabled:opacity-50"
+            disabled={!locked}
           />
 
           <button
@@ -392,7 +414,8 @@ const CardInput: React.FC = () => {
                 weakness: { ...cardData.weakness, amount: newAmount },
               });
             }}
-            className="px-2 py-1 border rounded-lg bg-gray-300 dark:bg-gray-700 dark:text-gray-200"
+            className="px-2 py-1 border rounded-lg bg-gray-300 dark:bg-gray-700 dark:text-gray-200 disabled:opacity-50"
+            disabled={!locked}
           >
             +
           </button>
@@ -408,7 +431,8 @@ const CardInput: React.FC = () => {
                 },
               })
             }
-            className="w-1/2 px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+            className="w-1/2 px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 disabled:opacity-50"
+            disabled={!locked}
           >
             <option value="">None</option>
             <option>Gaslighting</option>
@@ -433,7 +457,8 @@ const CardInput: React.FC = () => {
                 resists: { ...cardData.resists, amount: newAmount },
               });
             }}
-            className="px-2 py-1 border rounded-lg bg-gray-300 dark:bg-gray-700 dark:text-gray-200"
+            className="px-2 py-1 border rounded-lg bg-gray-300 dark:bg-gray-700 dark:text-gray-200 disabled:opacity-50"
+            disabled={!locked}
           >
             -
           </button>
@@ -442,7 +467,8 @@ const CardInput: React.FC = () => {
             type="number"
             value={cardData.resists.amount}
             readOnly
-            className="w-16 text-center px-2 py-1 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+            className="w-16 text-center px-2 py-1 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 disabled:opacity-50"
+            disabled={!locked}
           />
 
           <button
@@ -454,7 +480,8 @@ const CardInput: React.FC = () => {
                 resists: { ...cardData.resists, amount: newAmount },
               });
             }}
-            className="px-2 py-1 border rounded-lg bg-gray-300 dark:bg-gray-700 dark:text-gray-200"
+            className="px-2 py-1 border rounded-lg bg-gray-300 dark:bg-gray-700 dark:text-gray-200 disabled:opacity-50"
+            disabled={!locked}
           >
             +
           </button>
@@ -470,7 +497,8 @@ const CardInput: React.FC = () => {
                 },
               })
             }
-            className="w-1/2 px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+            className="w-1/2 px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 disabled:opacity-50"
+            disabled={!locked}
           >
             <option value="">None</option>
             <option>Gaslighting</option>
@@ -493,7 +521,8 @@ const CardInput: React.FC = () => {
               rarity: e.target.value,
             })
           }
-          className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+          className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 disabled:opacity-50"
+          disabled={!locked}
         >
           <option value="">Select Rarity</option>
           <option>Common</option>
@@ -515,7 +544,8 @@ const CardInput: React.FC = () => {
             })
           }
           placeholder="Enter Title"
-          className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+          className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 disabled:opacity-50"
+          disabled={!locked}
         />
       </div>
 
