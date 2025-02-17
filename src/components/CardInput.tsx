@@ -7,6 +7,16 @@ import type {
   AttackTypes,
 } from "../stores/cardStore";
 
+type ProfileWorkerResponse = {
+  name: string;
+  username: string;
+  isBlueVerified: boolean;
+  followers: number;
+  following: number;
+  profilePicture: string;
+  coverPicture: string;
+};
+
 const CardInput: React.FC = () => {
   const cardData = useStore(cardDataStore);
 
@@ -38,7 +48,18 @@ const CardInput: React.FC = () => {
         throw new Error("Failed to fetch profile");
       }
 
-      const profileData = await response.json();
+      const profileData = (await response.json()) as ProfileWorkerResponse;
+      setCardData({
+        ...cardData,
+        username: profileData.username,
+        name: profileData.name,
+        followers: profileData.followers,
+        following: profileData.following,
+        profilePic: profileData.profilePicture,
+        profileBanner: profileData.coverPicture,
+        isBlueCheck: profileData.isBlueVerified,
+      });
+
       console.log(profileData);
     } catch (error) {
       console.error("Error fetching profile:", error);
