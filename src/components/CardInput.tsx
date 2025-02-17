@@ -19,11 +19,13 @@ type Attack = {
 };
 
 type CardData = {
+  name: string;
   username: string;
   profilePic: string;
   profileBanner: string;
   followers: number;
   following: number;
+  isBlueCheck: boolean;
   weakness: { amount: number; type: AttackTypes };
   resists: { amount: number; type: AttackTypes };
   createdOn: Date;
@@ -36,11 +38,13 @@ type CardData = {
 
 const CardInput: React.FC = () => {
   const [cardData, setCardData] = useState<CardData>({
+    name: "",
     username: "",
     profilePic: "", // base64 png
     profileBanner: "", // base64 png
     followers: 0,
     following: 0,
+    isBlueCheck: false,
     weakness: { amount: 0, type: "None" },
     resists: { amount: 0, type: "None" },
     createdOn: new Date(),
