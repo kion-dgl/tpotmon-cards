@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useStore } from "@nanostores/react";
-import { cardDataStore, setCardData } from "../stores/cardStore"; // Import store
+import { cardDataStore, setCardData, resetCardData } from "../stores/cardStore"; // Import store
 import type {
   AbilityTypes,
   AttackChance,
@@ -78,9 +78,21 @@ const CardInput: React.FC = () => {
         />
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 flex space-x-4">
         <button
-          className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50"
+          className="w-1/2 px-4 py-2 bg-cyan-700 text-white rounded-lg hover:bg-cyan-600 disabled:opacity-50"
+          onClick={(e) => {
+            resetCardData();
+            setLocked(false);
+            localStorage.removeItem("user-set");
+          }}
+          disabled={!locked}
+        >
+          Reset Form
+        </button>
+
+        <button
+          className="w-1/2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50"
           onClick={fetchProfile}
           disabled={locked}
         >
@@ -539,7 +551,7 @@ const CardInput: React.FC = () => {
       {/* Download Image & JSON */}
       <div className="mb-4 flex space-x-4">
         <button
-          className="w-1/2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none"
+          className="w-1/2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none disabled:opacity-50"
           onClick={(e) => {
             const json = JSON.stringify(cardData, null, 2); // Assuming `editorOutput` holds the JSON
             navigator.clipboard
@@ -549,17 +561,21 @@ const CardInput: React.FC = () => {
               })
               .catch((err) => console.error("Copy failed", err));
           }}
+          disabled={!locked}
         >
           Copy Card Data
         </button>
 
-        <a
-          className="w-1/2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none"
-          target="_blank"
-          href={`https://github.com/kion-dgl/tpotmon-cards/new/main/collections?filename=${cardData.username}.json`}
+        <button
+          className="w-1/2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none disabled:opacity-50"
+          disabled={!locked}
+          onClick={(e) => {
+            const url = `https://github.com/kion-dgl/tpotmon-cards/new/main/collections?filename=${cardData.username}.json`;
+            window.open(url, "_blank");
+          }}
         >
           Create Card
-        </a>
+        </button>
       </div>
     </div>
   );
