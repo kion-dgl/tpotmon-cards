@@ -18,20 +18,21 @@ type ProfileWorkerResponse = {
 };
 
 const CardInput: React.FC = () => {
+  const [username, setUsername] = useState("");
   const cardData = useStore(cardDataStore);
   const [locked, setLocked] = useState(
     localStorage.getItem("user-set") ? true : false,
   );
 
   const fetchProfile = async () => {
-    if (!cardData.username) {
+    if (!username.length) {
       alert("Please enter a username.");
       return;
     }
 
     try {
       const response = await fetch(
-        `https://profile.kion-87a.workers.dev/?username=${cardData.username}`,
+        `https://profile.kion-87a.workers.dev/?username=${username}`,
       );
 
       if (!response.ok) {
@@ -65,13 +66,8 @@ const CardInput: React.FC = () => {
         <label className="block text-sm font-medium mb-2">Username</label>
         <input
           type="text"
-          value={cardData.username}
-          onChange={(e) =>
-            setCardData({
-              ...cardData,
-              username: e.target.value,
-            })
-          }
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           placeholder="Enter username"
           className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 disabled:opacity-60"
           disabled={locked}

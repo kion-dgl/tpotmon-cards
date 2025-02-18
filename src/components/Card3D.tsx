@@ -41,7 +41,12 @@ const Card3D: React.FC = () => {
                 display: "block",
                 margin: "auto",
                 marginTop: "14px",
-                backgroundImage: 'url("/banner/kion.jpeg")',
+                backgroundColor: cardData.profileBanner
+                  ? "rgba(0,0,0,0)"
+                  : isDark
+                    ? "#222"
+                    : "#eee",
+                backgroundImage: `url(${cardData.profileBanner})`,
                 backgroundSize: "cover",
                 backgroundOrigin: "center",
                 backgroundPosition: "center",
@@ -63,6 +68,11 @@ const Card3D: React.FC = () => {
               width: "240px",
               borderRadius: "100%",
               backgroundImage: `url(${cardData.profilePic})`,
+              backgroundColor: cardData.profilePic
+                ? "rgba(0,0,0,0)"
+                : isDark
+                  ? "#222"
+                  : "#eee",
               backgroundSize: "contain",
               backgroundOrigin: "center",
               backgroundPosition: "center",
@@ -401,7 +411,7 @@ const Card3D: React.FC = () => {
                 textAlign: "right",
               }}
             >
-              Elder Weeb
+              {cardData.title}
             </span>
           </div>
         </div>
