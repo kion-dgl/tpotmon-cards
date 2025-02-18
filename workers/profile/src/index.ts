@@ -70,9 +70,8 @@ export default {
 			}
 
 			// Convert images to base64
-			const profilePictureBase64 = await convertToBase64(data.profilePicture);
-
-			console.log(data);
+			const profileUrl = data.profilePicture.replace('_normal', '_400x400');
+			const profilePictureBase64 = await convertToBase64(profileUrl);
 			const coverPictureBase64 = await convertToBase64(data.coverPicture);
 
 			// Return only the requested fields
