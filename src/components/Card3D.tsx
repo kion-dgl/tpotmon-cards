@@ -217,7 +217,7 @@ const Card3D: React.FC = () => {
               backfaceVisibility: "hidden",
             }}
           >
-            100 HP
+            {cardData.hp.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} HP
           </div>
 
           {/* Following / Followers */}
@@ -250,29 +250,32 @@ const Card3D: React.FC = () => {
               backfaceVisibility: "hidden",
             }}
           >
-            <article
-              style={{
-                border: isDark ? "2px solid #eee" : "2px solid #333",
-                borderRadius: "15px",
-                padding: "10px",
-                marginBottom: "20px",
-              }}
-            >
-              <h3
+            {cardData.abilities.map((ability) => (
+              <article
                 style={{
-                  fontSize: "24px",
+                  border: isDark ? "2px solid #eee" : "2px solid #333",
+                  borderRadius: "15px",
+                  padding: "10px",
                   marginBottom: "20px",
                 }}
               >
-                Passive Ability
-              </h3>
-              <p>
-                Kion has strong connections and engages with all of his moots.
-                Kion directly contributes +50 engagement and +10 impressions per
-                turn. Kion boosts the engagement of lowbie cards on the field by
-                +20 and highbie cards by +30.
-              </p>
-            </article>
+                <h3
+                  style={{
+                    fontSize: "24px",
+                    marginBottom: "20px",
+                  }}
+                >
+                  Passive Ability: {ability.name}
+                </h3>
+                <p>
+                  Kion has strong connections and engages with all of his moots.
+                  Kion directly contributes +50 engagement and +10 impressions
+                  per turn. Kion boosts the engagement of lowbie cards on the
+                  field by +20 and highbie cards by +30.
+                </p>
+              </article>
+            ))}
+
             <article
               style={{
                 backgroundColor: isDark ? "rgb(61, 84, 102)" : "#ddd",
