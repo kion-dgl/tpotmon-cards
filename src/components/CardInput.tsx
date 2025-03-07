@@ -18,11 +18,11 @@ type ProfileWorkerResponse = {
 };
 
 const CardInput: React.FC = () => {
-  const [username, setUsername] = useState("");
   const cardData = useStore(cardDataStore);
   const [locked, setLocked] = useState(
     localStorage.getItem("user-set") ? true : false,
   );
+  const [username, setUsername] = useState(locked ? cardData.username : "");
 
   const fetchProfile = async () => {
     if (!username.length) {
@@ -84,7 +84,7 @@ const CardInput: React.FC = () => {
           }}
           disabled={!locked}
         >
-          Reset Form
+          Clear Form
         </button>
 
         <button

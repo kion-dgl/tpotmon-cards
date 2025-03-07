@@ -142,29 +142,33 @@ const Card3D: React.FC = () => {
               backfaceVisibility: "hidden",
             }}
           >
-            <span
-              style={{
-                backgroundColor: "#ccc",
-                color: "#333",
-                borderTopLeftRadius: "15px",
-                borderBottomLeftRadius: "15px",
-                padding: "2px 10px",
-              }}
-            >
-              Weakness: +30 Goon
-            </span>
-            <span
-              style={{
-                backgroundColor: "#333",
-                color: "#ccc",
-                borderTopRightRadius: "15px",
-                borderBottomRightRadius: "15px",
-                padding: "2px 10px",
-                marginLeft: "10px",
-              }}
-            >
-              Resist: -20 Drama
-            </span>
+            {cardData.weakness.type !== "None" && (
+              <span
+                style={{
+                  backgroundColor: "#ccc",
+                  color: "#333",
+                  borderTopLeftRadius: "15px",
+                  borderBottomLeftRadius: "15px",
+                  padding: "2px 10px",
+                }}
+              >
+                Weakness: +{cardData.weakness.amount} {cardData.weakness.type}
+              </span>
+            )}
+            {cardData.resists.type !== "None" && (
+              <span
+                style={{
+                  backgroundColor: "#333",
+                  color: "#ccc",
+                  borderTopRightRadius: "15px",
+                  borderBottomRightRadius: "15px",
+                  padding: "2px 10px",
+                  marginLeft: "10px",
+                }}
+              >
+                Resist: -{cardData.resists.amount} {cardData.resists.type}
+              </span>
+            )}
           </div>
 
           {/* Back of the Card */}
