@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useStore } from "@nanostores/react";
 import { cardDataStore } from "../stores/cardStore"; // Adjust the path as needed
+import ReactMarkdown from "react-markdown";
 
 const Card3D: React.FC = () => {
   const cardData = useStore(cardDataStore);
@@ -286,25 +287,15 @@ const Card3D: React.FC = () => {
                       marginBottom: "20px",
                     }}
                   >
-                    Attack: Psyop Banger
+                    Attack: {attack.name}
                   </h3>
+
                   <p
                     style={{
                       marginBottom: "20px",
                     }}
                   >
-                    Kion crafts a retarded banger. Flip a coin to determine the
-                    outcome.
-                  </p>
-                  <p
-                    style={{
-                      marginBottom: "20px",
-                    }}
-                  >
-                    <b>Heads: </b> Kion crafts a banger that targets a specific
-                    set of nerds and shakes them to their very foundation. While
-                    the impressions damage is low, it causes trauma damage to
-                    the target, freezing them for one turn.
+                    <ReactMarkdown>{attack.description}</ReactMarkdown>
                   </p>
                   <div
                     style={{
@@ -323,37 +314,7 @@ const Card3D: React.FC = () => {
                         borderRadius: "10px",
                       }}
                     >
-                      20 Damage
-                    </span>
-                  </div>
-                  <p
-                    style={{
-                      marginBottom: "20px",
-                    }}
-                  >
-                    <b>Tails: </b> Kion creates a gay post, and while it's can't
-                    be considered remotely funny or tasteful, for some reason
-                    his followers love that gay shit and flock to give likes,
-                    and also to ask him which 7/11 he sucks dick behind.
-                  </p>
-                  <div
-                    style={{
-                      display: "flex",
-                      width: "100%",
-                      justifyContent: "flex-end",
-                      marginBottom: "20px",
-                    }}
-                  >
-                    <span
-                      style={{
-                        backgroundColor: "rgb(51, 51, 51)",
-                        padding: "2px 10px",
-                        color: "rgb(204, 204, 204)",
-                        fontSize: "20px",
-                        borderRadius: "10px",
-                      }}
-                    >
-                      60 Damage
+                      {attack.damage} Damage
                     </span>
                   </div>
                 </div>
