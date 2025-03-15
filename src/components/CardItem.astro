@@ -1,24 +1,91 @@
 ---
+import type { CollectionEntry } from 'astro:content';
 // Define props with TypeScript interface
 interface Props {
-    id: number;
-    title: string;
-    description: string;
+    card: CollectionEntry<'cards'>;
 }
 
 // Destructure props
-const { id, title, description } = Astro.props;
+const { card } = Astro.props;
 ---
 
 <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow dark:bg-gray-800">
-    <div class="aspect-w-3 aspect-h-4 bg-gray-200 dark:bg-gray-700">
-        <!-- Placeholder for card image -->
-        <div class="flex items-center justify-center h-48 text-gray-500 dark:text-gray-400">
-            Card {id} Image
+  <div class="relative">
+    <!-- Profile pic -->
+    <div class="absolute bottom-0 left-4 transform translate-y-1/2 z-10">
+      <div class="w-16 h-16 rounded-full overflow-hidden border-4 border-white dark:border-gray-800">
+        <img 
+          src={card.profilePic} 
+          alt={`${card.name}'s profile`} 
+          class="w-full h-full object-cover"
+          onerror="this.src='https://via.placeholder.com/150'; this.onerror=null;"
+        />
+      </div>
+      {card.isBlueCheck && (
+        <div class="absolute -right-1 bottom-0 bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+          ✓
         </div>
+      )}
     </div>
-    <div class="p-4">
-        <h3 class="text-lg font-semibold mb-2">{title}</h3>
-        <p class="text-gray-600 dark:text-gray-300">{description}</p>
+    
+    <!-- Card banner/header -->
+    <div class="h-24 bg-gray-300 dark:bg-gray-700 overflow-hidden">
+      <img 
+        src={card.profilePic} 
+        alt={`${card.name}'s banner`} 
+        class="w-full h-full object-cover"
+        onerror="this.style.display='none'; this.onerror=null;"
+      />
     </div>
+  </div>
+  
+  <!-- Card body -->
+  <div class="p-4 pt-12">
+    <!-- User info -->
+    <div class="mb-4">
+      <h3 class="text-lg font-bold">{card.name}</h3>
+      <p class="text-gray-600 dark:text-gray-400 text-sm">@{card.username}</p>
+      <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">
+        <span class="font-medium">{card.followers.toLocaleString()}</span> followers · 
+        <span class="font-medium">{card.following.toLocaleString()}</span> following
+      </p>
+    </div>
+    
+    <!-- Card stats -->
+    <div class="bg-gray-100 dark:bg-gray-700 rounded p-3 mb-3">
+      <div class="flex justify-between mb-2">
+        <span class="text-sm text-gray-600 dark:text-gray-300">Rarity:</span>
+        <span class="text-sm font-medium">{card.rarity || "Unknown"}</span>
+      </div>
+      <div class="flex justify-between mb-2">
+        <span class="text-sm text-gray-600 dark:text-gray-300">HP:</span>
+        <span class="text-sm font-medium">{card.hp || "0"}</span>
+      </div>
+      <div class="flex justify-between mb-2">
+        <span class="text-sm text-gray-600 dark:text-gray-300">Weakness:</span>
+        <span class="text-sm font-medium">{card.weakness.type} ({card.weakness.amount})</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="text-sm text-gray-600 dark:text-gray-300">Resists:</span>
+        <span class="text-sm font-medium">{card.resists.type} ({card.resists.amount})</span>
+      </div>
+    </div>
+    
+    <!-- Abilities & Attacks Summary -->
+    <div>
+      {card.title && <p class="font-medium text-sm mb-1">{card.title}</p>}
+      
+      {card.abilities.length > 0 && card.abilities[0].name && (
+        <p class="text-xs text-gray-600 dark:text-gray-400">
+          <span class="font-medium">Ability:</span> {card.abilities[0].name}
+        </p>
+      )}
+      
+      {card.attacks.length > 0 && card.attacks[0].name && (
+        <p class="text-xs text-gray-600 dark:text-gray-400">
+          <span class="font-medium">Attack:</span> {card.attacks[0].name} ({card.attacks[0].damage})
+        </p>
+      )}
+    </div>
+  </div>
 </div>
