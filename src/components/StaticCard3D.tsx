@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
-// Import types from our types file
-import type { CardData } from "../types";
+import type { CollectionEntry } from "astro:content";
 
+// This makes the component easier to use by accepting the data object directly
 interface StaticCard3DProps {
-  cardData: CardData;
+  cardData: CollectionEntry<"cards">["data"];
 }
 
 const StaticCard3D: React.FC<StaticCard3DProps> = ({ cardData }) => {

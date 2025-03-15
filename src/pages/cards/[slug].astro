@@ -16,41 +16,8 @@ export async function getStaticPaths() {
 // Get the card from props
 const { card } = Astro.props;
 
-// Import types
-import type { AttackType, AbilityType, AttackChanceType } from "../../types";
-
-// Prepare card data for the static card component
-// Use type assertion to ensure the data matches the expected types
-const cardData = {
-  name: card.data.name,
-  username: card.data.username,
-  profilePic: card.data.profilePic,
-  profileBanner: card.data.profileBanner,
-  followers: card.data.followers,
-  following: card.data.following,
-  isBlueCheck: card.data.isBlueCheck,
-  weakness: {
-    amount: card.data.weakness.amount,
-    type: card.data.weakness.type as AttackType
-  },
-  resists: {
-    amount: card.data.resists.amount,
-    type: card.data.resists.type as AttackType
-  },
-  createdOn: card.data.createdOn,
-  rarity: card.data.rarity,
-  hp: card.data.hp?.toString() || "0",
-  abilities: card.data.abilities.map(ability => ({
-    ...ability,
-    type: ability.type as AbilityType
-  })),
-  attacks: card.data.attacks.map(attack => ({
-    ...attack,
-    type: attack.type as AttackType,
-    chance: attack.chance as AttackChanceType
-  })),
-  title: card.data.title
-};
+// The card data from the entry already has the correct types from the schema
+// No need to create a separate object or do type assertions
 ---
 
 <!doctype html>
@@ -150,7 +117,7 @@ const cardData = {
                 
                 <!-- Card Preview Section -->
                 <main class="w-full lg:w-2/3 bg-white p-6 rounded-lg shadow-md dark:bg-gray-800">
-                    <StaticCard3D client:only="react" cardData={cardData} />
+                    <StaticCard3D client:only="react" cardData={card.data} />
                 </main>
             </div>
             
