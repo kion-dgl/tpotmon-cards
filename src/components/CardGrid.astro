@@ -1,0 +1,23 @@
+---
+import CardItem from "./CardItem.astro";
+
+// Example card data - in a real app, you might fetch this from an API or CMS
+const cards = [
+    { id: 1, title: "Card 1", description: "Description for card 1" },
+    { id: 2, title: "Card 2", description: "Description for card 2" },
+    { id: 3, title: "Card 3", description: "Description for card 3" },
+    { id: 4, title: "Card 4", description: "Description for card 4" },
+    { id: 5, title: "Card 5", description: "Description for card 5" },
+    { id: 6, title: "Card 6", description: "Description for card 6" },
+];
+---
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {cards.map(card => (
+        <CardItem
+            id={card.id}
+            title={card.title}
+            description={card.description}
+        />
+    ))}
+</div>
