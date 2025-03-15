@@ -4,5 +4,14 @@
     "title": "The Code Wizard",
     "followers": 2748,
     "following": 996,
-    "isBlueCheck": true
+    "isBlueCheck": true,
+    "weakness": {
+        "amount": 0,
+        "type": "None"
+    },
+    "resists": {
+        "amount": 0,
+        "type": "None"
+    },
+    "createdOn": "2025-03-15T05:05:16.793Z"
 }
