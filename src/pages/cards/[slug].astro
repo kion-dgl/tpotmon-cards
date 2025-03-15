@@ -1,0 +1,147 @@
+---
+import "/src/styles/global.css";
+import { getCollection } from 'astro:content';
+import Navbar from "../../components/Navbar.astro";
+import StaticCard3D from "../../components/StaticCard3D.tsx";
+
+// Generate routes for all cards in the collection
+export async function getStaticPaths() {
+  const cards = await getCollection('cards');
+  return cards.map(card => ({
+    params: { slug: card.id },
+    props: { card }
+  }));
+}
+
+// Get the card from props
+const { card } = Astro.props;
+
+// Prepare card data for the static card component
+const cardData = {
+  name: card.data.name,
+  username: card.data.username,
+  profilePic: card.data.profilePic,
+  profileBanner: card.data.profileBanner,
+  followers: card.data.followers,
+  following: card.data.following,
+  isBlueCheck: card.data.isBlueCheck,
+  weakness: card.data.weakness,
+  resists: card.data.resists,
+  createdOn: card.data.createdOn,
+  rarity: card.data.rarity,
+  hp: card.data.hp?.toString() || "0",
+  abilities: card.data.abilities,
+  attacks: card.data.attacks,
+  title: card.data.title
+};
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{card.data.name} - Tpotmon Card</title>
+        <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    </head>
+    <body class="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100">
+        <!-- Navbar -->
+        <Navbar title="Tpotmon" createLink="/create" />
+
+        <!-- Main Content -->
+        <div class="container mx-auto mt-6">
+            <div class="flex flex-col lg:flex-row gap-6">
+                <!-- Card Information Section -->
+                <div class="w-full lg:w-1/3 bg-white p-6 rounded-lg shadow-md dark:bg-gray-800">
+                    <div class="flex items-center mb-4">
+                        <div class="w-16 h-16 rounded-full overflow-hidden mr-4">
+                            <img 
+                                src={card.data.profilePic} 
+                                alt={`${card.data.name}'s profile`} 
+                                class="w-full h-full object-cover"
+                                onerror="this.src='/pfp/kion.jpg'; this.onerror=null;"
+                            />
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold">{card.data.name}</h1>
+                            <p class="text-gray-600 dark:text-gray-400">@{card.data.username}</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Card Stats -->
+                    <div class="bg-gray-100 dark:bg-gray-700 rounded p-4 mb-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Rarity</h3>
+                                <p class="font-medium">{card.data.rarity}</p>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">HP</h3>
+                                <p class="font-medium">{card.data.hp}</p>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Followers</h3>
+                                <p class="font-medium">{card.data.followers.toLocaleString()}</p>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Following</h3>
+                                <p class="font-medium">{card.data.following.toLocaleString()}</p>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Weakness</h3>
+                                <p class="font-medium">{card.data.weakness.type} (+{card.data.weakness.amount})</p>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Resists</h3>
+                                <p class="font-medium">{card.data.resists.type} (-{card.data.resists.amount})</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Abilities -->
+                    {card.data.abilities.length > 0 && (
+                        <div class="mb-4">
+                            <h2 class="text-xl font-bold mb-2">Abilities</h2>
+                            {card.data.abilities.map(ability => (
+                                <div class="bg-gray-100 dark:bg-gray-700 rounded p-3 mb-2">
+                                    <h3 class="font-medium">{ability.name} ({ability.type})</h3>
+                                    <p class="text-gray-600 dark:text-gray-400 text-sm">{ability.description}</p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                    
+                    <!-- Attacks -->
+                    {card.data.attacks.length > 0 && (
+                        <div>
+                            <h2 class="text-xl font-bold mb-2">Attacks</h2>
+                            {card.data.attacks.map(attack => (
+                                <div class="bg-gray-100 dark:bg-gray-700 rounded p-3 mb-2">
+                                    <div class="flex justify-between">
+                                        <h3 class="font-medium">{attack.name}</h3>
+                                        <span class="bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded text-sm">
+                                            {attack.damage} Damage
+                                        </span>
+                                    </div>
+                                    <p class="text-gray-600 dark:text-gray-400 text-sm">{attack.description}</p>
+                                    <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">Type: {attack.type} | Chance: {attack.chance}</p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+                
+                <!-- Card Preview Section -->
+                <main class="w-full lg:w-2/3 bg-white p-6 rounded-lg shadow-md dark:bg-gray-800">
+                    <StaticCard3D client:only="react" cardData={cardData} />
+                </main>
+            </div>
+            
+            <div class="mt-6 flex justify-between">
+                <a href="/" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600">
+                    Back to Gallery
+                </a>
+            </div>
+        </div>
+    </body>
+</html>
