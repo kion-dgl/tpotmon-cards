@@ -30,7 +30,3 @@ jobs:
       - name: Build project
         run: npm run build
       
-      - name: Validate content collection schema
-        run: |
-          # Run the validation script
-          node validate-collections.mjs

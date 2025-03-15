@@ -39,14 +39,13 @@ User cards belong to different tiers, requiring varying amounts of Engagement Po
 
 This project includes a GitHub Actions workflow that runs on pull requests to the main branch:
 
-1. **TypeScript Validation**: Runs `astro check` to ensure all TypeScript code is valid
+1. **TypeScript and Schema Validation**: Runs `astro check` to ensure all TypeScript code is valid and content collections conform to their schemas
 2. **Build Verification**: Ensures the project builds correctly with `astro build`
-3. **Content Schema Validation**: Verifies that all card JSON files in the content collection conform to the schema defined in `src/content/config.ts`
 
 To run these checks locally:
 
 ```bash
-# TypeScript type checking
+# TypeScript and schema validation
 npm run astro check
 
 # Build the project
