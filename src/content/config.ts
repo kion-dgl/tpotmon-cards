@@ -9,6 +9,8 @@ const cardCollection = defineCollection({
         followers: z.number(),
         following: z.number(),
         isBlueCheck: z.boolean(),
+        profilePic: z.string().startsWith("data:image", "Profile picture must be a data URL starting with 'data:image'"),
+        profileBanner: z.string().startsWith("data:image", "Banner must be a data URL starting with 'data:image'"),
         title: z.string(),
         weakness: z.object({
             amount: z.number(),
