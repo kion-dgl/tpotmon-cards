@@ -19,6 +19,20 @@ const cardCollection = defineCollection({
             type: z.string()
         }),
         createdOn: z.string().transform(str => new Date(str)),
+        rarity: z.enum(["Common", "Uncommon", "Rare", "Epic", "Legendary"]), // Only allow specific rarity values
+        hp: z.union([z.number(), z.null()]), // Must be a number or null, but must exist
+        abilities: z.array(z.object({
+            name: z.string(),
+            type: z.string(),
+            description: z.string()
+        })).max(2, "Maximum of 2 abilities allowed"),
+        attacks: z.array(z.object({
+            name: z.string(),
+            type: z.string(),
+            damage: z.number(),
+            chance: z.string(),
+            description: z.string()
+        })).max(2, "Maximum of 2 attacks allowed"),
     })
 });
 

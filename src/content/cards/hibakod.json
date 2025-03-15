@@ -13,5 +13,23 @@
         "amount": 0,
         "type": "None"
     },
-    "createdOn": "2025-03-15T05:05:16.793Z"
+    "createdOn": "2025-03-15T05:05:16.793Z",
+    "rarity": "Rare",
+    "hp": 100,
+    "abilities": [
+        {
+            "name": "",
+            "type": "Passive",
+            "description": ""
+        }
+    ],
+    "attacks": [
+        {
+            "name": "",
+            "type": "None",
+            "damage": 0,
+            "chance": "Direct",
+            "description": ""
+        }
+    ]
 }
