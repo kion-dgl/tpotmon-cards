@@ -1,19 +1,41 @@
 import { readdir, readFile } from 'fs/promises';
 import path from 'path';
+import fs from 'fs';
 
 async function validateCards() {
   console.log('Validating content collections against schema...');
   
   try {
+    // First, read the config.ts file to extract the enum values
     const cardsDir = path.join(process.cwd(), 'src/content/cards');
+    const configPath = path.join(process.cwd(), 'src/content/config.ts');
+    const configContent = await readFile(configPath, 'utf8');
+    
+    // Extract enum values using regex from config.ts
+    const attackTypesMatch = configContent.match(/const AttackTypes = \[(.*?)\] as const/);
+    const abilityTypesMatch = configContent.match(/const AbilityTypes = \[(.*?)\] as const/);
+    const attackChanceTypesMatch = configContent.match(/const AttackChanceTypes = \[(.*?)\] as const/);
+    const rarityTypesMatch = configContent.match(/z.enum\(\["(.*?)"\]\)/);
+    
+    if (!attackTypesMatch || !abilityTypesMatch || !attackChanceTypesMatch || !rarityTypesMatch) {
+      console.error('Failed to extract type information from config.ts');
+      process.exit(1);
+    }
+    
+    // Parse the enum values from the config.ts file
+    const AttackTypes = JSON.parse(`[${attackTypesMatch[1]}]`);
+    const AbilityTypes = JSON.parse(`[${abilityTypesMatch[1]}]`);
+    const AttackChanceTypes = JSON.parse(`[${attackChanceTypesMatch[1]}]`);
+    const RarityTypes = rarityTypesMatch[1].split('", "');
+    
+    console.log('Using schema types:');
+    console.log('- Attack Types:', AttackTypes);
+    console.log('- Ability Types:', AbilityTypes);
+    console.log('- Attack Chance Types:', AttackChanceTypes);
+    console.log('- Rarity Types:', RarityTypes);
+    
     const files = await readdir(cardsDir);
     let hasErrors = false;
-    
-    // Define schema validation rules based on config.ts
-    const AttackTypes = ["None", "Goon", "Thirst", "Gaslight", "Roast"];
-    const AbilityTypes = ["One-Time", "Passive", "Active"];
-    const AttackChanceTypes = ["Direct", "Dice Roll", "Coin Flip"];
-    const RarityTypes = ["Common", "Uncommon", "Rare", "Epic", "Legendary"];
     
     for (const file of files) {
       if (!file.endsWith('.json')) continue;
