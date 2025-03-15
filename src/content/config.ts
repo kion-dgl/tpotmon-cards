@@ -6,6 +6,9 @@ const cardCollection = defineCollection({
   schema: z.object({
     name: z.string(),
     username: z.string(),
+    followers: z.number(),
+    following: z.number(),
+    isBlueCheck: z.boolean(),
     title: z.string()
   })
 });

@@ -7,6 +7,7 @@ interface Props {
 
 // Destructure props
 const { card } = Astro.props;
+const { data } = card;
 ---
 
 <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow dark:bg-gray-800">
@@ -15,14 +16,12 @@ const { card } = Astro.props;
   <div class="p-4 pt-12">
     <!-- User info -->
     <div class="mb-4">
-      <h3 class="text-lg font-bold">{card.name}</h3>
-      <p class="text-gray-600 dark:text-gray-400 text-sm">@{card.username}</p>
-
+      <h3 class="text-lg font-bold">{data.name}</h3>
+      <p class="text-gray-600 dark:text-gray-400 text-sm">@{data.username}</p>
     </div>
   
     <div>
-      <p class="font-medium text-sm mb-1">{card.title}</p>
-    
+      <p class="font-medium text-sm mb-1">{data.title}</p>
     </div>
   </div>
 </div>
