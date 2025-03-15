@@ -77,7 +77,7 @@ const CardInput: React.FC = () => {
       <div className="mb-4 flex space-x-4">
         <button
           className="w-1/2 px-4 py-2 bg-cyan-700 text-white rounded-lg hover:bg-cyan-600 disabled:opacity-50"
-          onClick={(e) => {
+          onClick={() => {
             resetCardData();
             setLocked(false);
             localStorage.removeItem("user-set");
@@ -548,7 +548,7 @@ const CardInput: React.FC = () => {
       <div className="mb-4 flex space-x-4">
         <button
           className="w-1/2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none disabled:opacity-50"
-          onClick={(e) => {
+          onClick={() => {
             const json = JSON.stringify(cardData, null, 2); // Assuming `editorOutput` holds the JSON
             navigator.clipboard
               .writeText(json)
@@ -565,7 +565,7 @@ const CardInput: React.FC = () => {
         <button
           className="w-1/2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none disabled:opacity-50"
           disabled={!locked}
-          onClick={(e) => {
+          onClick={() => {
             const url = `https://github.com/kion-dgl/tpotmon-cards/new/main/collections?filename=${cardData.username}.json`;
             window.open(url, "_blank");
           }}

@@ -32,3 +32,22 @@ User cards belong to different tiers, requiring varying amounts of Engagement Po
 ### **Winning & Losing**  
 - Players start with **Influence Points**.  
 - The game continues until one player **loses all their Influence Points**, making their presence irrelevant.  
+
+## Development
+
+### Continuous Integration
+
+This project includes a GitHub Actions workflow that runs on pull requests to the main branch:
+
+1. **TypeScript and Schema Validation**: Runs `astro check` to ensure all TypeScript code is valid and content collections conform to their schemas
+2. **Build Verification**: Ensures the project builds correctly with `astro build`
+
+To run these checks locally:
+
+```bash
+# TypeScript and schema validation
+npm run astro check
+
+# Build the project
+npm run build
+```
