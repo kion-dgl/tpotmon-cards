@@ -40,7 +40,7 @@ function getRarityColorClass(rarity: "Common" | "Uncommon" | "Rare" | "Epic" | "
             src={data.profilePic} 
             alt={`${data.name}'s profile`} 
             class="w-full h-full object-cover"
-            onerror="this.src='https://via.placeholder.com/150'; this.onerror=null;"
+            onerror="this.src='https://via.placeholder.com/150';"
           />
         </div>
         {data.isBlueCheck && (
@@ -56,7 +56,7 @@ function getRarityColorClass(rarity: "Common" | "Uncommon" | "Rare" | "Epic" | "
           src={data.profileBanner} 
           alt={`${data.name}'s banner`} 
           class="w-full h-full object-cover"
-          onerror="this.style.display='none'; this.onerror=null;"
+          onerror="this.style.display='none';"
         />
       </div>
     </div>
