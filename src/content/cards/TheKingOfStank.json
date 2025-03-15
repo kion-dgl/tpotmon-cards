@@ -9,11 +9,11 @@
     "title": "Funk Master Supreme",
     "weakness": {
         "amount": 10,
-        "type": "Fresh"
+        "type": "Goon"
     },
     "resists": {
         "amount": 30,
-        "type": "Odor"
+        "type": "None"
     },
     "createdOn": "2025-02-15T08:45:22.331Z",
     "rarity": "Legendary",
@@ -21,16 +21,16 @@
     "abilities": [
         {
             "name": "Royal Stench",
-            "type": "Active",
+            "type": "Passive",
             "description": "Creates a cloud of funk that confuses opponents for 2 turns"
         }
     ],
     "attacks": [
         {
             "name": "Stank Face",
-            "type": "Normal",
+            "type": "Goon",
             "damage": 45,
-            "chance": "Critical",
+            "chance": "Direct",
             "description": "Facial expression so funky it has a 25% chance to cause critical damage"
         }
     ]
