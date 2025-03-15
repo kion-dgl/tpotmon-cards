@@ -9,11 +9,11 @@
     "title": "The Pattern Matcher",
     "weakness": {
         "amount": 15,
-        "type": "Literal"
+        "type": "Goon"
     },
     "resists": {
         "amount": 20,
-        "type": "Wildcard"
+        "type": "None"
     },
     "createdOn": "2025-03-01T14:32:17.523Z",
     "rarity": "Epic",
@@ -28,7 +28,7 @@
     "attacks": [
         {
             "name": "Global Match",
-            "type": "Special",
+            "type": "Goon",
             "damage": 65,
             "chance": "Direct",
             "description": "Matches all instances of a pattern and deals damage for each occurrence"

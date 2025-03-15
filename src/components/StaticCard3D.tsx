@@ -1,42 +1,7 @@
 import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
-
-// Define the type for card data
-type AttackTypes = "None" | "Goon" | "Thirst" | "Gaslight" | "Roast";
-type AttackChance = "Direct" | "Dice Roll" | "Coin Flip";
-type AbilityTypes = "One-Time" | "Passive" | "Active";
-
-type Ability = {
-  type: AbilityTypes;
-  name: string;
-  description: string;
-};
-
-type Attack = {
-  name: string;
-  chance: AttackChance;
-  type: AttackTypes;
-  damage: number;
-  description: string;
-};
-
-type CardData = {
-  name: string;
-  username: string;
-  profilePic: string;
-  profileBanner: string;
-  followers: number;
-  following: number;
-  isBlueCheck: boolean;
-  weakness: { amount: number; type: AttackTypes };
-  resists: { amount: number; type: AttackTypes };
-  createdOn: Date | string;
-  rarity: string;
-  hp: string | number;
-  abilities: Ability[];
-  attacks: Attack[];
-  title: string;
-};
+// Import types from our types file
+import { CardData } from "../types";
 
 interface StaticCard3DProps {
   cardData: CardData;
