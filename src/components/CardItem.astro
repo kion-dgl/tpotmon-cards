@@ -1,0 +1,128 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+// Define props with TypeScript interface
+interface Props {
+  card: CollectionEntry<'cards'>;
+  slug?: string; // Optional slug if you want to use a custom one
+}
+
+// Destructure props
+const { card, slug = card.id } = Astro.props;
+const { data } = card;
+
+// Helper function to get color class based on rarity
+function getRarityColorClass(rarity: "Common" | "Uncommon" | "Rare" | "Epic" | "Legendary"): string {
+  switch (rarity) {
+    case "Common": 
+      return "text-gray-600 dark:text-gray-400";
+    case "Uncommon": 
+      return "text-green-600 dark:text-green-400";
+    case "Rare": 
+      return "text-blue-600 dark:text-blue-400";
+    case "Epic": 
+      return "text-purple-600 dark:text-purple-400";
+    case "Legendary": 
+      return "text-amber-500 dark:text-amber-300";
+    default: 
+      return "text-gray-600 dark:text-gray-400";
+  }
+}
+---
+
+<div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow dark:bg-gray-800">
+  <a href={`/cards/${slug}`} class="block">
+    <div class="relative">
+      <!-- Profile pic -->
+      <div class="absolute bottom-0 left-4 transform translate-y-1/2 z-10">
+        <div class="w-16 h-16 rounded-full overflow-hidden border-4 border-white dark:border-gray-800">
+          <img 
+            src={data.profilePic} 
+            alt={`${data.name}'s profile`} 
+            class="w-full h-full object-cover"
+            onerror="this.src='https://via.placeholder.com/150'; this.onerror=null;"
+          />
+        </div>
+        {data.isBlueCheck && (
+          <div class="absolute -right-1 bottom-0 bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+            ✓
+          </div>
+        )}
+      </div>
+      
+      <!-- Card banner/header -->
+      <div class="h-24 bg-gray-300 dark:bg-gray-700 overflow-hidden">
+        <img 
+          src={data.profileBanner} 
+          alt={`${data.name}'s banner`} 
+          class="w-full h-full object-cover"
+          onerror="this.style.display='none'; this.onerror=null;"
+        />
+      </div>
+    </div>
+    
+    <!-- Card body -->
+    <div class="p-4 pt-12">
+      <!-- User info -->
+      <div class="mb-4">
+        <h3 class="text-lg font-bold">{data.name}</h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm">@{data.username}</p>
+        <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">
+          <span class="font-medium">{data.followers.toLocaleString()}</span> followers · 
+          <span class="font-medium">{data.following.toLocaleString()}</span> following
+        </p>
+      </div>
+      
+      <!-- Card stats -->
+      <div class="bg-gray-100 dark:bg-gray-700 rounded p-3 mb-3">
+        <div class="flex justify-between mb-2">
+          <span class="text-sm text-gray-600 dark:text-gray-300">Rarity:</span>
+          <span class={`text-sm font-medium ${getRarityColorClass(data.rarity)}`}>{data.rarity}</span>
+        </div>
+        <div class="flex justify-between mb-2">
+          <span class="text-sm text-gray-600 dark:text-gray-300">HP:</span>
+          <span class="text-sm font-medium">{data.hp !== null ? data.hp : "N/A"}</span>
+        </div>
+        <div class="flex justify-between mb-2">
+          <span class="text-sm text-gray-600 dark:text-gray-300">Weakness:</span>
+          <span class="text-sm font-medium">{data.weakness.type} ({data.weakness.amount})</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-sm text-gray-600 dark:text-gray-300">Resists:</span>
+          <span class="text-sm font-medium">{data.resists.type} ({data.resists.amount})</span>
+        </div>
+      </div>
+      
+      <!-- Abilities & Attacks Summary -->
+      <div>
+        {data.title && <p class="font-medium text-sm mb-1">{data.title}</p>}
+        
+        {data.abilities.length > 0 && data.abilities[0].name && (
+          <p class="text-xs text-gray-600 dark:text-gray-400">
+            <span class="font-medium">Ability:</span> {data.abilities[0].name}
+          </p>
+        )}
+        
+        {data.abilities.length > 1 && data.abilities[1].name && (
+          <p class="text-xs text-gray-600 dark:text-gray-400">
+            <span class="font-medium">Ability 2:</span> {data.abilities[1].name}
+          </p>
+        )}
+        
+        {data.attacks.length > 0 && data.attacks[0].name && (
+          <p class="text-xs text-gray-600 dark:text-gray-400">
+            <span class="font-medium">Attack:</span> {data.attacks[0].name} ({data.attacks[0].damage})
+          </p>
+        )}
+        
+        {data.attacks.length > 1 && data.attacks[1].name && (
+          <p class="text-xs text-gray-600 dark:text-gray-400">
+            <span class="font-medium">Attack 2:</span> {data.attacks[1].name} ({data.attacks[1].damage})
+          </p>
+        )}
+        
+        <p class="text-xs text-gray-500 mt-2">Created: {data.createdOn.toLocaleDateString()}</p>
+      </div>
+    </div>
+  </a>
+</div>
