@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 // Import types from our types file
-import { CardData } from "../types";
+import type { CardData } from "../types";
 
 interface StaticCard3DProps {
   cardData: CardData;
@@ -12,7 +12,8 @@ const StaticCard3D: React.FC<StaticCard3DProps> = ({ cardData }) => {
   const [isDark, updateIsDark] = useState(true);
 
   // Ensure HP is a string for formatting
-  const hpString = typeof cardData.hp === 'number' ? cardData.hp.toString() : cardData.hp;
+  const hpString =
+    typeof cardData.hp === "number" ? cardData.hp.toString() : cardData.hp;
 
   return (
     <div className="flex flex-col items-center">
@@ -51,8 +52,8 @@ const StaticCard3D: React.FC<StaticCard3DProps> = ({ cardData }) => {
                 backgroundColor: cardData.profileBanner
                   ? "rgba(0,0,0,0)"
                   : isDark
-                    ? "#222"
-                    : "#eee",
+                  ? "#222"
+                  : "#eee",
                 backgroundImage: `url(${cardData.profileBanner})`,
                 backgroundSize: "cover",
                 backgroundOrigin: "center",
@@ -78,8 +79,8 @@ const StaticCard3D: React.FC<StaticCard3DProps> = ({ cardData }) => {
               backgroundColor: cardData.profilePic
                 ? "rgba(0,0,0,0)"
                 : isDark
-                  ? "#222"
-                  : "#eee",
+                ? "#222"
+                : "#eee",
               backgroundSize: "contain",
               backgroundOrigin: "center",
               backgroundPosition: "center",
