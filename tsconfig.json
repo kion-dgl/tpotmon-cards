@@ -6,7 +6,8 @@
   ],
   "exclude": [
     "dist",
-    "workers"
+    "workers",
+    "script"
   ],
   "compilerOptions": {
     "jsx": "react-jsx",
