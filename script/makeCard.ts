@@ -41,7 +41,7 @@ async function fetchTwitterData(username: string) {
 
     console.log("✅ Got basic info!");
 
-    // Fetch up to 100 recent tweets
+    // Fetch up to 100 recent tweets (handling pagination)
     let allTweets: any[] = [];
     let nextCursor: string | null = null;
 
@@ -53,12 +53,16 @@ async function fetchTwitterData(username: string) {
       console.log(`📊 Total tweets before adding: ${allTweets.length}`);
 
       if (response.data.data && response.data.data.tweets) {
-        allTweets = allTweets.concat(response.data.data.tweets); // ✅ FIXED: Ensure tweets are added
-        nextCursor = response.data.data.next_cursor || null;
+        allTweets = allTweets.concat(response.data.data.tweets); // ✅ Fix: Properly append tweets
+        nextCursor = response.data.next_cursor || null;
+	console.log("Next cursor: ", nextCursor);
         console.log(`📊 Total tweets after adding: ${allTweets.length}`);
       }
 
-      if (!response.data.data.has_next_page || !nextCursor) break; // ✅ FIXED: Stop if no more pages
+      if (!response.data.has_next_page || !nextCursor) {
+	      console.log("Break point triggered!!!");
+	      break; // ✅ Fix: Stop if no more pages
+	}
     }
 
     return { user: userInfo.data.data, tweets: allTweets.slice(0, 100) };
@@ -81,7 +85,7 @@ async function fetchBase64Image(url: string) {
 
 // Generate a tpotmon card using OpenAI Assistant
 async function generateCard(userData: any) {
-  // Prepare minimal tweet data for AI
+  // Prepare structured tweet data for AI
   const structuredData = {
     name: userData.user.name,
     username: userData.user.userName,
@@ -101,7 +105,22 @@ async function generateCard(userData: any) {
   try {
     console.log("🤖 Sending data to OpenAI Assistant...");
     const thread = await openai.beta.threads.create({
-      messages: [{ role: "user", content: JSON.stringify(structuredData) }],
+      messages: [
+        {
+          role: "user",
+          content: JSON.stringify(structuredData),
+        },
+        {
+          role: "user",
+          content: `You are generating a tpotmon card based on a user's Twitter activity. DO NOT generate a biography or description of the user. Instead:
+          - Focus ONLY on generating **abilities and attacks** based on their tweets.
+          - Abilities should reference **patterns in their tweets** (e.g., constantly replying, posting memes, baiting engagement).
+          - Attacks should reference **how they interact with others** (e.g., getting ratioed, dunking, oversharing, schizo posting).
+          - Use humor and sarcasm to reflect the user's posting style.
+          - Ensure **each attack and ability is UNIQUE** based on their tweet content.
+          - Responses must be in JSON format.`
+        }
+      ],
     });
 
     const run = await openai.beta.threads.runs.createAndPoll(thread.id, {
