@@ -33,22 +33,40 @@ async function fetchTwitterData(username: string) {
     console.log(`📡 Fetching data for @${username}...`);
     console.log(`🔑 Using API Key: ${TWITTER_API_KEY.slice(0, 4)}... (hidden for security)`);
 
-    const headers = { "X-API-Key": TWITTER_API_KEY }; // ✅ Correct capitalization
+    const headers = { "X-API-Key": TWITTER_API_KEY };
 
-    const userInfo = await axios.get(`${TWITTER_API_BASE}/user/info?userName=${username}`, {
-      headers,
-    });
+    // Fetch user info
+    const userInfo = await axios.get(`${TWITTER_API_BASE}/user/info?userName=${username}`, { headers });
 
-    const userTweets = await axios.get(`${TWITTER_API_BASE}/user/last_tweets?userName=${username}`, {
-      headers,
-    });
+    console.log("✅ Got basic info!");
 
-    return { user: userInfo.data.data, tweets: userTweets.data.tweets };
+    // Fetch up to 100 recent tweets
+    let allTweets: any[] = [];
+    let nextCursor: string | null = null;
+
+    while (allTweets.length < 100) {
+      const url = `${TWITTER_API_BASE}/user/last_tweets?userName=${username}` + (nextCursor ? `&cursor=${nextCursor}` : "");
+      const response = await axios.get(url, { headers });
+
+      console.log("🔄 Received tweet batch...");
+      console.log(response.data);
+
+      if (response.data.data && response.data.data.tweets) {
+        allTweets = [...allTweets, ...response.data.data.tweets]; // ✅ FIXED
+        nextCursor = response.data.data.next_cursor || null;
+      }
+
+      console.log(`📊 Total tweets fetched: ${allTweets.length}`);
+      if (!response.data.data.has_next_page) break; // ✅ FIXED (must access `data` key)
+    }
+
+    return { user: userInfo.data.data, tweets: allTweets.slice(0, 100) };
   } catch (error) {
     console.error(`❌ Error fetching Twitter data for ${username}:`, error.response?.data || error.message);
     process.exit(1);
   }
 }
+
 
 // Convert image URL to base64
 async function fetchBase64Image(url: string) {
@@ -63,6 +81,7 @@ async function fetchBase64Image(url: string) {
 
 // Generate a tpotmon card using OpenAI Assistant
 async function generateCard(userData: any) {
+  // Prepare minimal tweet data for AI
   const structuredData = {
     name: userData.user.name,
     username: userData.user.userName,
@@ -92,6 +111,7 @@ async function generateCard(userData: any) {
     if (run.status === "completed") {
       const messages = await openai.beta.threads.messages.list(thread.id);
       const aiResponse = messages.data[0]?.content[0]?.text;
+      console.log(aiResponse);
       return JSON.parse(aiResponse);
     }
   } catch (error) {
