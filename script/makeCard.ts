@@ -12,8 +12,6 @@ const OPENAI_ASSISTANT_ID = "asst_0n1hLhZIKNqVhVyuo2IfeAGA";
 const TWITTER_API_KEY = process.env.TWITTER_API_KEY!;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
 
-console.log(process.env.TWITTER_API_KEY);
-
 // OpenAI client
 const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 
@@ -25,22 +23,29 @@ if (!username) {
   process.exit(1);
 }
 
-// Fetch Twitter user data
 async function fetchTwitterData(username: string) {
+  if (!TWITTER_API_KEY) {
+    console.error("❌ TWITTER_API_KEY is missing from .env!");
+    process.exit(1);
+  }
+
   try {
-    const userInfo = await axios.get(`${TWITTER_API_BASE}/user/info`, {
-      params: { username },
-      headers: { Authorization: `Bearer ${TWITTER_API_KEY}` },
+    console.log(`📡 Fetching data for @${username}...`);
+    console.log(`🔑 Using API Key: ${TWITTER_API_KEY.slice(0, 4)}... (hidden for security)`);
+
+    const headers = { "X-API-Key": TWITTER_API_KEY }; // ✅ Correct capitalization
+
+    const userInfo = await axios.get(`${TWITTER_API_BASE}/user/info?userName=${username}`, {
+      headers,
     });
 
-    const userTweets = await axios.get(`${TWITTER_API_BASE}/user/last_tweets`, {
-      params: { username },
-      headers: { Authorization: `Bearer ${TWITTER_API_KEY}` },
+    const userTweets = await axios.get(`${TWITTER_API_BASE}/user/last_tweets?userName=${username}`, {
+      headers,
     });
 
     return { user: userInfo.data.data, tweets: userTweets.data.tweets };
   } catch (error) {
-    console.error(`Error fetching Twitter data for ${username}:`, error.response?.data || error.message);
+    console.error(`❌ Error fetching Twitter data for ${username}:`, error.response?.data || error.message);
     process.exit(1);
   }
 }
@@ -75,6 +80,7 @@ async function generateCard(userData: any) {
   };
 
   try {
+    console.log("🤖 Sending data to OpenAI Assistant...");
     const thread = await openai.beta.threads.create({
       messages: [{ role: "user", content: JSON.stringify(structuredData) }],
     });
@@ -89,7 +95,7 @@ async function generateCard(userData: any) {
       return JSON.parse(aiResponse);
     }
   } catch (error) {
-    console.error("Error generating card:", error.response?.data || error.message);
+    console.error("❌ Error generating card:", error.response?.data || error.message);
     process.exit(1);
   }
 }
@@ -104,14 +110,13 @@ async function saveCard(username: string, cardData: any) {
     await fs.writeJson(filePath, cardData, { spaces: 2 });
     console.log(`✅ Card saved: ${filePath}`);
   } catch (error) {
-    console.error("Error saving card:", error.message);
+    console.error("❌ Error saving card:", error.message);
     process.exit(1);
   }
 }
 
 // Main Execution
 (async () => {
-  console.log(`📡 Fetching data for @${username}...`);
   const twitterData = await fetchTwitterData(username);
 
   console.log("🖼️ Converting profile images to base64...");
