@@ -23,6 +23,7 @@ if (!username) {
   process.exit(1);
 }
 
+// Fetch Twitter user data
 async function fetchTwitterData(username: string) {
   if (!TWITTER_API_KEY) {
     console.error("❌ TWITTER_API_KEY is missing from .env!");
@@ -49,15 +50,15 @@ async function fetchTwitterData(username: string) {
       const response = await axios.get(url, { headers });
 
       console.log("🔄 Received tweet batch...");
-      console.log(response.data);
+      console.log(`📊 Total tweets before adding: ${allTweets.length}`);
 
       if (response.data.data && response.data.data.tweets) {
-        allTweets = [...allTweets, ...response.data.data.tweets]; // ✅ FIXED
+        allTweets = allTweets.concat(response.data.data.tweets); // ✅ FIXED: Ensure tweets are added
         nextCursor = response.data.data.next_cursor || null;
+        console.log(`📊 Total tweets after adding: ${allTweets.length}`);
       }
 
-      console.log(`📊 Total tweets fetched: ${allTweets.length}`);
-      if (!response.data.data.has_next_page) break; // ✅ FIXED (must access `data` key)
+      if (!response.data.data.has_next_page || !nextCursor) break; // ✅ FIXED: Stop if no more pages
     }
 
     return { user: userInfo.data.data, tweets: allTweets.slice(0, 100) };
@@ -66,7 +67,6 @@ async function fetchTwitterData(username: string) {
     process.exit(1);
   }
 }
-
 
 // Convert image URL to base64
 async function fetchBase64Image(url: string) {
@@ -110,8 +110,8 @@ async function generateCard(userData: any) {
 
     if (run.status === "completed") {
       const messages = await openai.beta.threads.messages.list(thread.id);
-      const aiResponse = messages.data[0]?.content[0]?.text;
-      console.log(aiResponse);
+      const aiResponse = messages.data[0]?.content[0]?.text?.value; // ✅ FIXED: Extract `.value`
+      console.log("📝 AI Response:", aiResponse);
       return JSON.parse(aiResponse);
     }
   } catch (error) {
